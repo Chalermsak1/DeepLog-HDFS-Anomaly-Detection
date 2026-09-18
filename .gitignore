@@ -1,0 +1,67 @@
+# ==============================================================================
+# DeepLog HDFS Anomaly Detection - .gitignore
+# ==============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments & Virtual Envs
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs & Debugging
+*.log
+deeplog_service.log
+
+# Model Weights & Checkpoints (Do NOT commit large binary checkpoints)
+# Use Git LFS, GitHub Releases, or external model hosting
+*.pt
+*.pth
+checkpoints/
+models/*.pt
+models/*.pth
+
+# Large Dataset Files (>100MB violates GitHub limits)
+# Raw preprocessed CSV files must be downloaded separately per dataset/README.md
+dataset/HDFS_v1/preprocessed/
+*.tar.gz
+*.zip
+*.parquet
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.ipynb_checkpoints
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Streamlit Cache
+.streamlit/

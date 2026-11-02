@@ -1,0 +1,1344 @@
+{
+  "metadata": {
+    "timestamp": "2026-11-02T19:40:32.538417",
+    "model_path": "deeplog_model_improved_v1.pt",
+    "use_jit": true,
+    "device": "cpu",
+    "top_k": 5,
+    "speedup": 0.0,
+    "max_events": 5000,
+    "num_normal_blocks": 120,
+    "num_abnormal_blocks": 30,
+    "session_timeout": 15.0
+  },
+  "telemetry": {
+    "total_events": 2826,
+    "total_blocks": 150,
+    "wall_clock_sec": 0.4311230182647705,
+    "throughput_eps": 6554.973592860765,
+    "alerts_raised": 27,
+    "inference_latency": {
+      "mean_ms": 0.145696636875307,
+      "p50_ms": 0.1403329661116004,
+      "p95_ms": 0.166239682585001,
+      "p99_ms": 0.18406275194138288,
+      "sub_millisecond": true
+    },
+    "queue_latency": {
+      "mean_ms": 0.00010405733696299078,
+      "p50_ms": 8.405186235904694e-05,
+      "p95_ms": 0.000125030055642128,
+      "p99_ms": 0.00020791776478290558
+    }
+  },
+  "detection_performance": {
+    "top_k": 5,
+    "tp": 17,
+    "fp": 1,
+    "tn": 119,
+    "fn": 13,
+    "accuracy": 0.9066666666666666,
+    "precision": 0.9444444444444444,
+    "recall": 0.5666666666666667,
+    "f1": 0.7083333333333334,
+    "fpr": 0.008333333333333333
+  },
+  "alerts_sample": [
+    {
+      "block_id": "blk_anom_0020",
+      "timestamp": 2.824251434118699,
+      "step_number": 18,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        2,
+        25
+      ],
+      "is_unseen": true,
+      "confidence": 0.999991774559021,
+      "latency_ms": 0.13895798474550247,
+      "context": [
+        5,
+        6,
+        5,
+        13,
+        13,
+        13,
+        11,
+        11,
+        11,
+        9
+      ],
+      "context_raw": [
+        9,
+        11,
+        9,
+        26,
+        26,
+        26,
+        23,
+        23,
+        23,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0017",
+      "timestamp": 2.980888641499709,
+      "step_number": 16,
+      "raw_event": 26,
+      "canonical_event": 13,
+      "topk_predictions": [
+        7,
+        4,
+        3,
+        12,
+        6
+      ],
+      "topk_raw_predictions": [
+        16,
+        6,
+        5,
+        25,
+        11
+      ],
+      "is_unseen": false,
+      "confidence": 0.8138660192489624,
+      "latency_ms": 0.1398748718202114,
+      "context": [
+        5,
+        6,
+        5,
+        6,
+        5,
+        13,
+        13,
+        12,
+        8,
+        3
+      ],
+      "context_raw": [
+        9,
+        11,
+        9,
+        11,
+        9,
+        26,
+        26,
+        25,
+        18,
+        5
+      ]
+    },
+    {
+      "block_id": "blk_anom_0000",
+      "timestamp": 3.3797494018079237,
+      "step_number": 23,
+      "raw_event": 28,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        0,
+        1,
+        2,
+        12
+      ],
+      "topk_raw_predictions": [
+        21,
+        2,
+        3,
+        4,
+        25
+      ],
+      "is_unseen": true,
+      "confidence": 0.9999949932098389,
+      "latency_ms": 0.14050002209842205,
+      "context": [
+        13,
+        2,
+        2,
+        1,
+        0,
+        11,
+        11,
+        11,
+        9,
+        9
+      ],
+      "context_raw": [
+        26,
+        4,
+        4,
+        3,
+        2,
+        23,
+        23,
+        23,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0000",
+      "timestamp": 3.4022755778323326,
+      "step_number": 24,
+      "raw_event": 26,
+      "canonical_event": 13,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        0
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        2
+      ],
+      "is_unseen": false,
+      "confidence": 0.9999839067459106,
+      "latency_ms": 0.13983389362692833,
+      "context": [
+        2,
+        2,
+        1,
+        0,
+        11,
+        11,
+        11,
+        9,
+        9,
+        14
+      ],
+      "context_raw": [
+        4,
+        4,
+        3,
+        2,
+        23,
+        23,
+        23,
+        21,
+        21,
+        -1337
+      ]
+    },
+    {
+      "block_id": "blk_anom_0024",
+      "timestamp": 4.447562533885877,
+      "step_number": 19,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        0
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        2
+      ],
+      "is_unseen": true,
+      "confidence": 0.9999830722808838,
+      "latency_ms": 0.13908417895436287,
+      "context": [
+        6,
+        5,
+        13,
+        13,
+        13,
+        11,
+        11,
+        11,
+        9,
+        9
+      ],
+      "context_raw": [
+        11,
+        9,
+        26,
+        26,
+        26,
+        23,
+        23,
+        23,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0018",
+      "timestamp": 4.567912565290787,
+      "step_number": 22,
+      "raw_event": 28,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        0,
+        1,
+        13,
+        12
+      ],
+      "topk_raw_predictions": [
+        21,
+        2,
+        3,
+        26,
+        25
+      ],
+      "is_unseen": true,
+      "confidence": 0.9999939203262329,
+      "latency_ms": 0.14129094779491425,
+      "context": [
+        13,
+        13,
+        2,
+        2,
+        1,
+        11,
+        11,
+        11,
+        9,
+        9
+      ],
+      "context_raw": [
+        26,
+        26,
+        4,
+        4,
+        3,
+        23,
+        23,
+        23,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0003",
+      "timestamp": 4.620234692654915,
+      "step_number": 13,
+      "raw_event": 27,
+      "canonical_event": -1,
+      "topk_predictions": [
+        13,
+        0,
+        12,
+        11,
+        8
+      ],
+      "topk_raw_predictions": [
+        26,
+        2,
+        25,
+        23,
+        18
+      ],
+      "is_unseen": true,
+      "confidence": 0.9995524287223816,
+      "latency_ms": 0.14433288015425205,
+      "context": [
+        3,
+        10,
+        6,
+        5,
+        6,
+        5,
+        13,
+        6,
+        5,
+        13
+      ],
+      "context_raw": [
+        5,
+        22,
+        11,
+        9,
+        11,
+        9,
+        26,
+        11,
+        9,
+        26
+      ]
+    },
+    {
+      "block_id": "blk_anom_0003",
+      "timestamp": 4.6458753725532835,
+      "step_number": 14,
+      "raw_event": 26,
+      "canonical_event": 13,
+      "topk_predictions": [
+        11,
+        1,
+        2,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        23,
+        3,
+        4,
+        2,
+        25
+      ],
+      "is_unseen": false,
+      "confidence": 0.6396195292472839,
+      "latency_ms": 0.1479999627918005,
+      "context": [
+        10,
+        6,
+        5,
+        6,
+        5,
+        13,
+        6,
+        5,
+        13,
+        14
+      ],
+      "context_raw": [
+        22,
+        11,
+        9,
+        11,
+        9,
+        26,
+        11,
+        9,
+        26,
+        -1337
+      ]
+    },
+    {
+      "block_id": "blk_anom_0018",
+      "timestamp": 4.6496678143808685,
+      "step_number": 23,
+      "raw_event": 26,
+      "canonical_event": 13,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        0
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        2
+      ],
+      "is_unseen": false,
+      "confidence": 0.999990701675415,
+      "latency_ms": 0.13870908878743649,
+      "context": [
+        13,
+        2,
+        2,
+        1,
+        11,
+        11,
+        11,
+        9,
+        9,
+        14
+      ],
+      "context_raw": [
+        26,
+        4,
+        4,
+        3,
+        23,
+        23,
+        23,
+        21,
+        21,
+        -1337
+      ]
+    },
+    {
+      "block_id": "blk_anom_0023",
+      "timestamp": 4.744208908637215,
+      "step_number": 18,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        2,
+        25
+      ],
+      "is_unseen": true,
+      "confidence": 0.999991774559021,
+      "latency_ms": 0.13875006698071957,
+      "context": [
+        5,
+        6,
+        5,
+        13,
+        13,
+        13,
+        11,
+        11,
+        11,
+        9
+      ],
+      "context_raw": [
+        9,
+        11,
+        9,
+        26,
+        26,
+        26,
+        23,
+        23,
+        23,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0015",
+      "timestamp": 4.904411347889624,
+      "step_number": 31,
+      "raw_event": 28,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        13
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        26
+      ],
+      "is_unseen": true,
+      "confidence": 0.9998797178268433,
+      "latency_ms": 0.152332941070199,
+      "context": [
+        2,
+        1,
+        2,
+        1,
+        1,
+        11,
+        11,
+        11,
+        9,
+        9
+      ],
+      "context_raw": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        23,
+        23,
+        23,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0027",
+      "timestamp": 5.295131821030641,
+      "step_number": 14,
+      "raw_event": 27,
+      "canonical_event": -1,
+      "topk_predictions": [
+        11,
+        1,
+        2,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        23,
+        3,
+        4,
+        2,
+        25
+      ],
+      "is_unseen": true,
+      "confidence": 0.7580609321594238,
+      "latency_ms": 0.13970793224871159,
+      "context": [
+        10,
+        6,
+        5,
+        6,
+        5,
+        6,
+        5,
+        13,
+        13,
+        13
+      ],
+      "context_raw": [
+        22,
+        11,
+        9,
+        11,
+        9,
+        11,
+        9,
+        26,
+        26,
+        26
+      ]
+    },
+    {
+      "block_id": "blk_anom_0026",
+      "timestamp": 6.044125135163292,
+      "step_number": 18,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        2,
+        25
+      ],
+      "is_unseen": true,
+      "confidence": 0.999991774559021,
+      "latency_ms": 0.1377081498503685,
+      "context": [
+        5,
+        6,
+        5,
+        13,
+        13,
+        13,
+        11,
+        11,
+        11,
+        9
+      ],
+      "context_raw": [
+        9,
+        11,
+        9,
+        26,
+        26,
+        26,
+        23,
+        23,
+        23,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_norm_0063",
+      "timestamp": 7.292911247969657,
+      "step_number": 14,
+      "raw_event": 26,
+      "canonical_event": 13,
+      "topk_predictions": [
+        2,
+        11,
+        1,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        4,
+        23,
+        3,
+        2,
+        25
+      ],
+      "is_unseen": false,
+      "confidence": 0.385736882686615,
+      "latency_ms": 0.138165894895792,
+      "context": [
+        3,
+        13,
+        13,
+        6,
+        5,
+        6,
+        5,
+        6,
+        5,
+        0
+      ],
+      "context_raw": [
+        5,
+        26,
+        26,
+        11,
+        9,
+        11,
+        9,
+        11,
+        9,
+        2
+      ]
+    },
+    {
+      "block_id": "blk_anom_0010",
+      "timestamp": 7.837242943844145,
+      "step_number": 25,
+      "raw_event": 23,
+      "canonical_event": 11,
+      "topk_predictions": [
+        9,
+        0,
+        1,
+        13,
+        3
+      ],
+      "topk_raw_predictions": [
+        21,
+        2,
+        3,
+        26,
+        5
+      ],
+      "is_unseen": false,
+      "confidence": 0.9999727010726929,
+      "latency_ms": 0.1413330901414156,
+      "context": [
+        8,
+        3,
+        7,
+        4,
+        13,
+        13,
+        9,
+        11,
+        11,
+        11
+      ],
+      "context_raw": [
+        18,
+        5,
+        16,
+        6,
+        26,
+        26,
+        21,
+        23,
+        23,
+        23
+      ]
+    },
+    {
+      "block_id": "blk_anom_0014",
+      "timestamp": 8.042894285661642,
+      "step_number": 13,
+      "raw_event": 27,
+      "canonical_event": -1,
+      "topk_predictions": [
+        13,
+        0,
+        11,
+        12,
+        8
+      ],
+      "topk_raw_predictions": [
+        26,
+        2,
+        23,
+        25,
+        18
+      ],
+      "is_unseen": true,
+      "confidence": 0.9948293566703796,
+      "latency_ms": 0.14812499284744263,
+      "context": [
+        3,
+        3,
+        6,
+        5,
+        6,
+        5,
+        13,
+        6,
+        5,
+        13
+      ],
+      "context_raw": [
+        5,
+        5,
+        11,
+        9,
+        11,
+        9,
+        26,
+        11,
+        9,
+        26
+      ]
+    },
+    {
+      "block_id": "blk_anom_0014",
+      "timestamp": 8.059997426254844,
+      "step_number": 14,
+      "raw_event": 26,
+      "canonical_event": 13,
+      "topk_predictions": [
+        11,
+        1,
+        2,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        23,
+        3,
+        4,
+        2,
+        25
+      ],
+      "is_unseen": false,
+      "confidence": 0.5568904280662537,
+      "latency_ms": 0.15166611410677433,
+      "context": [
+        3,
+        6,
+        5,
+        6,
+        5,
+        13,
+        6,
+        5,
+        13,
+        14
+      ],
+      "context_raw": [
+        5,
+        11,
+        9,
+        11,
+        9,
+        26,
+        11,
+        9,
+        26,
+        -1337
+      ]
+    },
+    {
+      "block_id": "blk_anom_0010",
+      "timestamp": 8.101647182012535,
+      "step_number": 28,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        0
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        2
+      ],
+      "is_unseen": true,
+      "confidence": 0.999963641166687,
+      "latency_ms": 0.13670907355844975,
+      "context": [
+        4,
+        13,
+        13,
+        9,
+        11,
+        11,
+        11,
+        11,
+        9,
+        9
+      ],
+      "context_raw": [
+        6,
+        26,
+        26,
+        21,
+        23,
+        23,
+        23,
+        23,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0012",
+      "timestamp": 8.273650738015856,
+      "step_number": 5,
+      "raw_event": 25,
+      "canonical_event": 12,
+      "topk_predictions": [
+        6,
+        5,
+        13,
+        3,
+        10
+      ],
+      "topk_raw_predictions": [
+        11,
+        9,
+        26,
+        5,
+        22
+      ],
+      "is_unseen": false,
+      "confidence": 0.9563864469528198,
+      "latency_ms": 0.13595889322459698,
+      "context": [
+        14,
+        14,
+        14,
+        14,
+        14,
+        14,
+        3,
+        3,
+        3,
+        10
+      ],
+      "context_raw": [
+        -1337,
+        -1337,
+        -1337,
+        -1337,
+        -1337,
+        -1337,
+        5,
+        5,
+        5,
+        22
+      ]
+    },
+    {
+      "block_id": "blk_anom_0019",
+      "timestamp": 8.333343685057308,
+      "step_number": 21,
+      "raw_event": 16,
+      "canonical_event": 7,
+      "topk_predictions": [
+        1,
+        2,
+        11,
+        3,
+        4
+      ],
+      "topk_raw_predictions": [
+        3,
+        4,
+        23,
+        5,
+        6
+      ],
+      "is_unseen": false,
+      "confidence": 0.5398780703544617,
+      "latency_ms": 0.13816705904901028,
+      "context": [
+        13,
+        6,
+        5,
+        1,
+        2,
+        0,
+        1,
+        12,
+        8,
+        3
+      ],
+      "context_raw": [
+        26,
+        11,
+        9,
+        3,
+        4,
+        2,
+        3,
+        25,
+        18,
+        5
+      ]
+    },
+    {
+      "block_id": "blk_anom_0029",
+      "timestamp": 8.368821360421066,
+      "step_number": 20,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        13
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        26
+      ],
+      "is_unseen": true,
+      "confidence": 0.9949095845222473,
+      "latency_ms": 0.13649999164044857,
+      "context": [
+        5,
+        13,
+        13,
+        13,
+        11,
+        11,
+        11,
+        9,
+        9,
+        9
+      ],
+      "context_raw": [
+        9,
+        26,
+        26,
+        26,
+        23,
+        23,
+        23,
+        21,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0007",
+      "timestamp": 8.402721815888231,
+      "step_number": 19,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        0
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        2
+      ],
+      "is_unseen": true,
+      "confidence": 0.9999830722808838,
+      "latency_ms": 0.13629207387566566,
+      "context": [
+        6,
+        5,
+        13,
+        13,
+        13,
+        11,
+        11,
+        11,
+        9,
+        9
+      ],
+      "context_raw": [
+        11,
+        9,
+        26,
+        26,
+        26,
+        23,
+        23,
+        23,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0012",
+      "timestamp": 9.123565223691864,
+      "step_number": 15,
+      "raw_event": 18,
+      "canonical_event": 8,
+      "topk_predictions": [
+        11,
+        1,
+        2,
+        0,
+        12
+      ],
+      "topk_raw_predictions": [
+        23,
+        3,
+        4,
+        2,
+        25
+      ],
+      "is_unseen": false,
+      "confidence": 0.7078595757484436,
+      "latency_ms": 0.15862495638430119,
+      "context": [
+        12,
+        6,
+        5,
+        6,
+        5,
+        6,
+        5,
+        13,
+        13,
+        13
+      ],
+      "context_raw": [
+        25,
+        11,
+        9,
+        11,
+        9,
+        11,
+        9,
+        26,
+        26,
+        26
+      ]
+    },
+    {
+      "block_id": "blk_anom_0019",
+      "timestamp": 9.567801662544879,
+      "step_number": 34,
+      "raw_event": 3,
+      "canonical_event": 1,
+      "topk_predictions": [
+        12,
+        0,
+        11,
+        9,
+        2
+      ],
+      "topk_raw_predictions": [
+        25,
+        2,
+        23,
+        21,
+        4
+      ],
+      "is_unseen": false,
+      "confidence": 0.8059266209602356,
+      "latency_ms": 0.3167081158608198,
+      "context": [
+        13,
+        9,
+        12,
+        3,
+        8,
+        4,
+        7,
+        13,
+        13,
+        9
+      ],
+      "context_raw": [
+        26,
+        21,
+        25,
+        5,
+        18,
+        6,
+        16,
+        26,
+        26,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0013",
+      "timestamp": 9.668284812238012,
+      "step_number": 19,
+      "raw_event": 20,
+      "canonical_event": -1,
+      "topk_predictions": [
+        9,
+        2,
+        1,
+        12,
+        0
+      ],
+      "topk_raw_predictions": [
+        21,
+        4,
+        3,
+        25,
+        2
+      ],
+      "is_unseen": true,
+      "confidence": 0.9999885559082031,
+      "latency_ms": 0.16125012189149857,
+      "context": [
+        5,
+        6,
+        5,
+        13,
+        13,
+        11,
+        11,
+        11,
+        9,
+        9
+      ],
+      "context_raw": [
+        9,
+        11,
+        9,
+        26,
+        26,
+        23,
+        23,
+        23,
+        21,
+        21
+      ]
+    },
+    {
+      "block_id": "blk_anom_0012",
+      "timestamp": 10.129727555729207,
+      "step_number": 20,
+      "raw_event": 21,
+      "canonical_event": 9,
+      "topk_predictions": [
+        0,
+        13,
+        11,
+        6,
+        1
+      ],
+      "topk_raw_predictions": [
+        2,
+        26,
+        23,
+        11,
+        3
+      ],
+      "is_unseen": false,
+      "confidence": 0.3543238639831543,
+      "latency_ms": 0.1570410095155239,
+      "context": [
+        6,
+        5,
+        13,
+        13,
+        13,
+        8,
+        3,
+        7,
+        4,
+        13
+      ],
+      "context_raw": [
+        11,
+        9,
+        26,
+        26,
+        26,
+        18,
+        5,
+        16,
+        6,
+        26
+      ]
+    },
+    {
+      "block_id": "blk_anom_0012",
+      "timestamp": 10.351112524479758,
+      "step_number": 21,
+      "raw_event": 23,
+      "canonical_event": 11,
+      "topk_predictions": [
+        2,
+        0,
+        5,
+        1,
+        6
+      ],
+      "topk_raw_predictions": [
+        4,
+        2,
+        9,
+        3,
+        11
+      ],
+      "is_unseen": false,
+      "confidence": 0.30718231201171875,
+      "latency_ms": 0.16037491150200367,
+      "context": [
+        5,
+        13,
+        13,
+        13,
+        8,
+        3,
+        7,
+        4,
+        13,
+        9
+      ],
+      "context_raw": [
+        9,
+        26,
+        26,
+        26,
+        18,
+        5,
+        16,
+        6,
+        26,
+        21
+      ]
+    }
+  ]
+}

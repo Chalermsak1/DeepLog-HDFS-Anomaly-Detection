@@ -6,7 +6,16 @@ from tqdm import tqdm
 class Preprocessor(object):
     """Preprocessor for loading data from standard data formats."""
 
-    def __init__(self, length, timeout, NO_EVENT=-1337):
+    def __init__(
+        self,
+        length=None,
+        timeout=None,
+        NO_EVENT=-1337,
+        add_eos=False,
+        eos_token='<EOS>',
+        EOS_ID=None,
+        context=None,
+    ):
         """Preprocessor for loading data from standard data formats.
 
             Parameters
@@ -22,13 +31,40 @@ class Preprocessor(object):
                 ID of NO_EVENT event, i.e., event returned for context when no
                 event was present. This happens in case of timeout or if an
                 event simply does not have enough preceding context events.
+
+            add_eos : bool, default=False
+                If True, appends an EOS token to the end of each machine/block sequence
+                before context generation.
+
+            eos_token : string or int, default='<EOS>'
+                Identifier used for the end-of-sequence token.
+
+            EOS_ID : int, optional, default=-1338
+                Integer ID for the end-of-sequence token. If explicitly specified,
+                it configures the EOS token as this integer ID.
+
+            context : int, optional
+                Alias for length.
             """
         # Set context length
+        if length is None and context is not None:
+            length = context
+        elif length is None and context is None:
+            raise TypeError("Preprocessor requires 'length' (or 'context') argument.")
+
         self.context_length = length
         self.timeout        = timeout
 
         # Set no-event event
         self.NO_EVENT = NO_EVENT
+
+        # Set EOS token configuration
+        self.add_eos = add_eos
+        self.EOS_ID = EOS_ID if EOS_ID is not None else -1338
+        if EOS_ID is not None and eos_token == '<EOS>':
+            self.eos_token = EOS_ID
+        else:
+            self.eos_token = eos_token
 
         # Set required columns
         self.REQUIRED_COLUMNS = {'timestamp', 'event', 'machine'}
@@ -38,7 +74,16 @@ class Preprocessor(object):
     #                      General data preprocessing                      #
     ########################################################################
 
-    def sequence(self, data, labels=None, verbose=False, mapping=None):
+    def sequence(
+        self,
+        data,
+        labels=None,
+        verbose=False,
+        mapping=None,
+        add_eos=None,
+        eos_token=None,
+        EOS_ID=None,
+    ):
         """Transform pandas DataFrame into DeepCASE sequences.
 
             Parameters
@@ -58,6 +103,16 @@ class Preprocessor(object):
                 If mapping is provided, use given mapping. Any additional unique values
                 will be appended to the given mapping. NO_EVENT may be present in the 
                 provided mapping, but it is not required.
+
+            add_eos : bool, optional, default=None
+                If True, append an EOS token at the end of each machine/block sequence.
+                If None, defaults to self.add_eos.
+
+            eos_token : string or int, optional, default=None
+                EOS token identifier. If None, defaults to self.eos_token.
+
+            EOS_ID : int, optional, default=None
+                Integer ID for the EOS token. If provided, overrides token identifier.
 
             Returns
             -------
@@ -83,6 +138,23 @@ class Preprocessor(object):
         #                  Transformations and checks                  #
         ################################################################
 
+        # Resolve EOS parameters
+        if add_eos is None:
+            if eos_token is not None or EOS_ID is not None:
+                add_eos = True
+            else:
+                add_eos = self.add_eos
+
+        if eos_token is not None:
+            chosen_eos_token = eos_token
+        elif EOS_ID is not None:
+            chosen_eos_token = EOS_ID
+        else:
+            chosen_eos_token = self.eos_token
+
+        # Work on a copy of data to avoid mutating caller DataFrame in-place
+        data = data.copy()
+
         # Case where a single label is given
         if isinstance(labels, int):
             # Set given label to all labels
@@ -105,28 +177,79 @@ class Preprocessor(object):
                 "samples: '{}'".format(labels.shape[0], data.shape[0])
             )
 
+        # Append EOS tokens if requested
+        if add_eos:
+            if labels.ndim:
+                data['_deeplog_label_temp'] = labels
+
+            # Ensure data is sorted by timestamp within machines
+            data = data.sort_values(by='timestamp')
+
+            # Identify last row of each machine to determine boundary timestamps
+            last_rows = data.groupby('machine', as_index=False).last()
+            last_rows['event'] = chosen_eos_token
+
+            # Advance timestamp by delta without exceeding timeout
+            delta = 1
+            if self.timeout is not None and not np.isinf(self.timeout):
+                if delta > self.timeout:
+                    delta = self.timeout / 2.0 if self.timeout > 0 else 0
+
+            # Increment timestamp respecting dtype
+            last_rows['timestamp'] = last_rows['timestamp'] + delta
+
+            # Combine and sort strictly by machine and timestamp
+            data = pd.concat([data, last_rows], ignore_index=True)
+            data.sort_values(by=['machine', 'timestamp'], kind='stable', inplace=True, ignore_index=True)
+
+            if '_deeplog_label_temp' in data.columns:
+                labels = data['_deeplog_label_temp'].values
+                del data['_deeplog_label_temp']
+
         ################################################################
         #                          Map events                          #
         ################################################################
 
         # Create mapping of events
         if mapping is None:
+            if add_eos:
+                all_unique = pd.Series(data['event'].unique())
+                raw_events = [e for e in all_unique if e != chosen_eos_token and e != self.NO_EVENT]
+            else:
+                raw_events = [e for e in data['event'].unique() if e != self.NO_EVENT]
+
+            try:
+                sorted_events = np.unique(raw_events)
+            except TypeError:
+                sorted_events = sorted(
+                    raw_events,
+                    key=lambda x: (0, x) if isinstance(x, (int, float, np.integer, np.floating)) else (1, str(x))
+                )
+
             mapping = {
-                i: event for i, event in enumerate(np.unique(data['event'].values))
+                i: event for i, event in enumerate(sorted_events)
             }
             
-            # Check that NO_EVENT is not in events
-            if self.NO_EVENT in mapping.values():
+            # Check that NO_EVENT is not in raw events
+            if self.NO_EVENT in raw_events:
                 raise ValueError(
                     "NO_EVENT ('{}') is also a valid Event ID".format(self.NO_EVENT)
                 )
+
+            # Check that chosen_eos_token is not in raw events
+            if add_eos and chosen_eos_token in raw_events:
+                raise ValueError(
+                    "EOS token ('{}') is also a valid Event ID".format(chosen_eos_token)
+                )
             
             mapping[len(mapping)] = self.NO_EVENT
+            if add_eos and chosen_eos_token not in mapping.values():
+                mapping[len(mapping)] = chosen_eos_token
         
         # Use given mapping and add missing events
         else:
             mapping = mapping.copy()
-            difference = list(set(data['event'].values) - set(mapping.values()))
+            difference = [e for e in data['event'].unique() if e not in mapping.values()]
             max_key = len(mapping)
             for i, val in enumerate(difference):
                 mapping[i+max_key] = val
@@ -140,6 +263,10 @@ class Preprocessor(object):
             # Add NO_EVENT if it is not present in mapping
             if self.NO_EVENT not in mapping.values():
                 mapping[len(mapping)] = self.NO_EVENT
+
+            # Add chosen_eos_token if add_eos is True and not in mapping
+            if add_eos and chosen_eos_token not in mapping.values():
+                mapping[len(mapping)] = chosen_eos_token
 
         mapping_inverse = {v: k for k, v in mapping.items()}
 
@@ -180,11 +307,14 @@ class Preprocessor(object):
         #                        Create context                        #
         ################################################################
 
-        # Sort data by timestamp
-        data = data.sort_values(by='timestamp')
+        if not add_eos:
+            # Sort data by timestamp
+            data = data.sort_values(by='timestamp')
+            machine_grouped = data.groupby('machine')
+        else:
+            # When add_eos=True, data is already grouped by machine and sorted by timestamp
+            machine_grouped = data.groupby('machine', sort=False)
 
-        # Group by machines
-        machine_grouped = data.groupby('machine')
         # Add verbosity
         if verbose: machine_grouped = tqdm(machine_grouped, desc='Loading')
 
@@ -241,7 +371,17 @@ class Preprocessor(object):
     #                     Preprocess different formats                     #
     ########################################################################
 
-    def csv(self, path, nrows=None, labels=None, verbose=False, mapping=None):
+    def csv(
+        self,
+        path,
+        nrows=None,
+        labels=None,
+        verbose=False,
+        mapping=None,
+        add_eos=None,
+        eos_token=None,
+        EOS_ID=None,
+    ):
         """Preprocess data from csv file.
 
             Note
@@ -272,6 +412,16 @@ class Preprocessor(object):
                 will be appended to the given mapping. NO_EVENT may be present in the 
                 provided mapping, but it is not required.
 
+            add_eos : bool, optional, default=None
+                If True, append an EOS token at the end of each machine/block sequence.
+                If None, defaults to self.add_eos.
+
+            eos_token : string or int, optional, default=None
+                EOS token identifier. If None, defaults to self.eos_token.
+
+            EOS_ID : int, optional, default=None
+                Integer ID for the EOS token. If provided, overrides token identifier.
+
             Returns
             -------
             events : torch.Tensor of shape=(n_samples,)
@@ -288,10 +438,27 @@ class Preprocessor(object):
         data = pd.read_csv(path, nrows=nrows)
 
         # Transform to sequences and return
-        return self.sequence(data, labels=labels, verbose=verbose, mapping=mapping)
+        return self.sequence(
+            data,
+            labels=labels,
+            verbose=verbose,
+            mapping=mapping,
+            add_eos=add_eos,
+            eos_token=eos_token,
+            EOS_ID=EOS_ID,
+        )
 
 
-    def json(self, path, labels=None, verbose=False, mapping=None):
+    def json(
+        self,
+        path,
+        labels=None,
+        verbose=False,
+        mapping=None,
+        add_eos=None,
+        eos_token=None,
+        EOS_ID=None,
+    ):
         """Preprocess data from json file.
 
             Note
@@ -316,6 +483,15 @@ class Preprocessor(object):
                 will be appended to the given mapping. NO_EVENT may be present in the 
                 provided mapping, but it is not required.
 
+            add_eos : bool, optional, default=None
+                If True, append an EOS token at the end of each machine/block sequence.
+
+            eos_token : string or int, optional, default=None
+                EOS token identifier.
+
+            EOS_ID : int, optional, default=None
+                Integer ID for the EOS token.
+
             Returns
             -------
             events : torch.Tensor of shape=(n_samples,)
@@ -331,7 +507,16 @@ class Preprocessor(object):
         raise NotImplementedError("Parsing '.json' not yet implemented.")
 
 
-    def ndjson(self, path, labels=None, verbose=False, mapping=None):
+    def ndjson(
+        self,
+        path,
+        labels=None,
+        verbose=False,
+        mapping=None,
+        add_eos=None,
+        eos_token=None,
+        EOS_ID=None,
+    ):
         """Preprocess data from ndjson file.
 
             Note
@@ -356,6 +541,15 @@ class Preprocessor(object):
                 will be appended to the given mapping. NO_EVENT may be present in the 
                 provided mapping, but it is not required.
 
+            add_eos : bool, optional, default=None
+                If True, append an EOS token at the end of each machine/block sequence.
+
+            eos_token : string or int, optional, default=None
+                EOS token identifier.
+
+            EOS_ID : int, optional, default=None
+                Integer ID for the EOS token.
+
             Returns
             -------
             events : torch.Tensor of shape=(n_samples,)
@@ -371,7 +565,17 @@ class Preprocessor(object):
         raise NotImplementedError("Parsing '.ndjson' not yet implemented.")
 
 
-    def text(self, path, nrows=None, labels=None, verbose=False, mapping=None):
+    def text(
+        self,
+        path,
+        nrows=None,
+        labels=None,
+        verbose=False,
+        mapping=None,
+        add_eos=None,
+        eos_token=None,
+        EOS_ID=None,
+    ):
         """Preprocess data from text file.
 
             Note
@@ -400,6 +604,16 @@ class Preprocessor(object):
                 If mapping is provided, use given mapping. Any additional unique values
                 will be appended to the given mapping. NO_EVENT may be present in the 
                 provided mapping, but it is not required.
+
+            add_eos : bool, optional, default=None
+                If True, append an EOS token at the end of each machine/block sequence.
+                If None, defaults to self.add_eos.
+
+            eos_token : string or int, optional, default=None
+                EOS token identifier. If None, defaults to self.eos_token.
+
+            EOS_ID : int, optional, default=None
+                Integer ID for the EOS token. If provided, overrides token identifier.
 
             Returns
             -------
@@ -441,7 +655,15 @@ class Preprocessor(object):
         })
 
         # Transform to sequences and return
-        return self.sequence(data, labels=labels, verbose=verbose, mapping=mapping)
+        return self.sequence(
+            data,
+            labels=labels,
+            verbose=verbose,
+            mapping=mapping,
+            add_eos=add_eos,
+            eos_token=eos_token,
+            EOS_ID=EOS_ID,
+        )
 
 
 if __name__ == "__main__":
@@ -469,6 +691,8 @@ if __name__ == "__main__":
     parser.add_argument('--type',              default='auto'  , help="file type to preprocess (auto|csv|json|ndjson|t(e)xt)")
     parser.add_argument('--context', type=int, default=10      , help="size of context")
     parser.add_argument('--timeout', type=int, default=60*60*24, help="maximum time between context and event")
+    parser.add_argument('--add_eos', action='store_true'       , help="append EOS token to each sequence")
+    parser.add_argument('--eos_token',         default='<EOS>' , help="EOS token identifier")
 
     # Parse arguments
     args = parser.parse_args()
@@ -498,8 +722,10 @@ if __name__ == "__main__":
 
     # Create preprocessor
     preprocessor = Preprocessor(
-        context = args.context,
-        timeout = args.timeout,
+        context   = args.context,
+        timeout   = args.timeout,
+        add_eos   = args.add_eos,
+        eos_token = args.eos_token,
     )
 
     # Preprocess file

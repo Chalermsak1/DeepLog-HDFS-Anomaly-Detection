@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -21,7 +21,12 @@ class SelfAttentionPooling(nn.Module):
             nn.Linear(dim, 1, bias=False),
         )
 
-    def forward(self, h: torch.Tensor, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+    def forward(
+        self,
+        h: torch.Tensor,
+        mask: Optional[torch.Tensor] = None,
+        return_weights: bool = False,
+    ) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
         """
         Parameters
         ----------
@@ -29,11 +34,15 @@ class SelfAttentionPooling(nn.Module):
             Hidden representations from sequence backbone.
         mask : torch.Tensor, optional
             Boolean or float mask for padded tokens.
+        return_weights : bool, default=False
+            If True, return a tuple of (pooled, weights).
 
         Returns
         -------
         pooled : torch.Tensor of shape (batch_size, hidden_size)
             Attention-weighted sequence representation.
+        weights : torch.Tensor of shape (batch_size, seq_len), optional
+            Normalized attention weights across sequence positions.
         """
         # Compute unnormalized attention energy: (batch_size, seq_len, 1)
         energy = self.attn_net(h)
@@ -46,6 +55,8 @@ class SelfAttentionPooling(nn.Module):
 
         weights = F.softmax(energy, dim=1)  # (batch_size, seq_len, 1)
         pooled = torch.sum(weights * h, dim=1)  # (batch_size, hidden_size)
+        if return_weights:
+            return pooled, weights.squeeze(-1)
         return pooled
 
 
@@ -147,14 +158,27 @@ class DeepLogDualHead(nn.Module):
             nn.Sigmoid(),
         )
 
-    def forward(self, X: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def get_input_embeddings(self) -> Optional[nn.Embedding]:
+        """Return the embedding layer if present."""
+        return self.embedding
+
+    def forward(
+        self,
+        X: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+        return_attention: bool = False,
+    ) -> Union[Tuple[torch.Tensor, torch.Tensor], Tuple[torch.Tensor, torch.Tensor, Optional[torch.Tensor]]]:
         """
         Forward pass producing token next-event log-probabilities and sequence anomaly probability.
 
         Parameters
         ----------
-        X : torch.Tensor of shape (batch_size, seq_len)
+        X : torch.Tensor of shape (batch_size, seq_len), optional
             Integer event index sequence.
+        inputs_embeds : torch.Tensor, optional
+            Continuous input representations of shape (batch_size, seq_len, emb_dim) or (seq_len, emb_dim).
+        return_attention : bool, default=False
+            If True, return a tuple (token_log_probs, sequence_anomaly_prob, attention_weights).
 
         Returns
         -------
@@ -162,19 +186,33 @@ class DeepLogDualHead(nn.Module):
             Log probabilities over the event vocabulary for the next event.
         sequence_anomaly_prob : torch.Tensor of shape (batch_size, 1)
             Calibrated binary anomaly probability for the sequence.
+        attn_weights : torch.Tensor of shape (batch_size, seq_len), optional
+            Attention pooling weights over the sequence tokens (if return_attention=True).
         """
-        if X.dim() == 1:
-            X = X.unsqueeze(0)
+        if X is None and inputs_embeds is None:
+            raise ValueError("Either X or inputs_embeds must be specified.")
 
-        # Prepare LSTM input
-        if self.embedding is not None:
-            X_emb = self.embedding(X.to(torch.int64))
+        if inputs_embeds is not None:
+            if inputs_embeds.dim() == 2:
+                inputs_embeds = inputs_embeds.unsqueeze(0)
+            X_emb = inputs_embeds
+            batch_size, seq_len, _ = inputs_embeds.shape
+            device = inputs_embeds.device
         else:
-            X_emb = F.one_hot(X.to(torch.int64), self.vocab_size).to(torch.float32)
+            if X.dim() == 1:
+                X = X.unsqueeze(0)
+            batch_size, seq_len = X.shape
+            device = X.device
+
+            # Prepare LSTM input
+            if self.embedding is not None:
+                X_emb = self.embedding(X.to(torch.int64))
+            else:
+                X_emb = F.one_hot(X.to(torch.int64), self.vocab_size).to(torch.float32)
 
         # Initial hidden states
-        h0 = torch.zeros(self.num_layers, X.size(0), self.hidden_size, device=X.device)
-        c0 = torch.zeros(self.num_layers, X.size(0), self.hidden_size, device=X.device)
+        h0 = torch.zeros(self.num_layers, batch_size, self.hidden_size, device=device)
+        c0 = torch.zeros(self.num_layers, batch_size, self.hidden_size, device=device)
 
         lstm_out, _ = self.lstm(X_emb, (h0, c0))  # (batch_size, seq_len, hidden_size)
 
@@ -184,15 +222,26 @@ class DeepLogDualHead(nn.Module):
         token_log_probs = self.token_softmax(token_logits)
 
         # 2. Sequence Head (sequence representation -> binary anomaly probability)
+        attn_weights = None
         if self.pooling_type == "attention" and self.pooler is not None:
-            seq_repr = self.pooler(lstm_out)
+            if return_attention:
+                seq_repr, attn_weights = self.pooler(lstm_out, return_weights=True)
+            else:
+                seq_repr = self.pooler(lstm_out)
         elif self.pooling_type == "mean":
             seq_repr = lstm_out.mean(dim=1)
+            if return_attention:
+                attn_weights = torch.full((batch_size, seq_len), 1.0 / seq_len, device=device)
         else:  # "last"
             seq_repr = last_hidden
+            if return_attention:
+                attn_weights = torch.zeros(batch_size, seq_len, device=device)
+                attn_weights[:, -1] = 1.0
 
         sequence_anomaly_prob = self.sequence_head(seq_repr)  # (batch_size, 1)
 
+        if return_attention:
+            return token_log_probs, sequence_anomaly_prob, attn_weights
         return token_log_probs, sequence_anomaly_prob
 
     def predict(

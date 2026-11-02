@@ -1,3 +1,4 @@
+from typing import Optional
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -39,29 +40,44 @@ class DeepLog(Module):
         # LogSoftmax for probability distribution
         self.softmax = nn.LogSoftmax(dim=-1)
 
-    def forward(self, X: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        X: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
         """
         Forward pass through DeepLog.
 
         Parameters
         ----------
-        X : torch.Tensor of shape (batch_size, seq_len)
+        X : torch.Tensor of shape (batch_size, seq_len), optional
             Integer event index sequence.
+        inputs_embeds : torch.Tensor, optional
+            Continuous input representations of shape (batch_size, seq_len, input_size).
 
         Returns
         -------
         out : torch.Tensor of shape (batch_size, output_size)
             Log probabilities over the event vocabulary for the next event.
         """
-        # One-hot encode integer event indices
-        X = F.one_hot(X.to(torch.int64), self.input_size).to(torch.float)
+        if inputs_embeds is not None:
+            if inputs_embeds.dim() == 2:
+                inputs_embeds = inputs_embeds.unsqueeze(0)
+            X_in = inputs_embeds
+        else:
+            if X is None:
+                raise ValueError("Either X or inputs_embeds must be specified.")
+            if X.dim() == 1:
+                X = X.unsqueeze(0)
+            # One-hot encode integer event indices
+            X_in = F.one_hot(X.to(torch.int64), self.input_size).to(torch.float)
 
         # Initial hidden and cell states
-        hidden = self._get_initial_state(X)
-        state = self._get_initial_state(X)
+        hidden = self._get_initial_state(X_in)
+        state = self._get_initial_state(X_in)
 
         # LSTM forward
-        out, _ = self.lstm(X, (hidden, state))
+        out, _ = self.lstm(X_in, (hidden, state))
         # Select last time-step hidden state
         out = self.out(out[:, -1, :])
         # Compute log probabilities

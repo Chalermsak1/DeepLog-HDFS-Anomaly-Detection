@@ -1,5 +1,5 @@
 import math
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple, Union
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -99,19 +99,22 @@ class CausalTransformerBlock(nn.Module):
         x: torch.Tensor,
         attn_mask: Optional[torch.Tensor] = None,
         key_padding_mask: Optional[torch.Tensor] = None,
-    ) -> torch.Tensor:
+        need_weights: bool = False,
+        average_attn_weights: bool = True,
+    ) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
         """
         Forward pass with residual Pre-LN connections.
         """
         # Pre-LN Self-Attention
         norm_x = self.norm1(x)
-        attn_out, _ = self.self_attn(
+        attn_out, attn_weights = self.self_attn(
             norm_x,
             norm_x,
             norm_x,
             attn_mask=attn_mask,
             key_padding_mask=key_padding_mask,
-            need_weights=False,
+            need_weights=need_weights,
+            average_attn_weights=average_attn_weights,
         )
         x = x + self.dropout1(attn_out)
 
@@ -120,6 +123,8 @@ class CausalTransformerBlock(nn.Module):
         ffn_out = self.ffn(norm_x2)
         x = x + self.dropout2(ffn_out)
 
+        if need_weights:
+            return x, attn_weights
         return x
 
 
@@ -224,28 +229,62 @@ class LogTransformer(nn.Module):
         self.head = nn.Linear(d_model, self.output_size)
         self.softmax = nn.LogSoftmax(dim=-1)
 
-    def forward(self, X: torch.Tensor, return_all_tokens: bool = False) -> torch.Tensor:
+    def get_input_embeddings(self) -> nn.Embedding:
+        """Return the token embedding layer."""
+        return self.token_embedding
+
+    def forward(
+        self,
+        X: Optional[torch.Tensor] = None,
+        return_all_tokens: bool = False,
+        return_attention: bool = False,
+        average_attn_weights: bool = True,
+        inputs_embeds: Optional[torch.Tensor] = None,
+    ) -> Union[torch.Tensor, Tuple[torch.Tensor, List[torch.Tensor]]]:
         """
         Forward pass through LogTransformer with causal masking.
 
         Parameters
         ----------
-        X : torch.Tensor of shape (batch_size, seq_len)
+        X : torch.Tensor of shape (batch_size, seq_len), optional
             Integer event index sequence.
         return_all_tokens : bool, default=False
             If True, return log probabilities for each time-step (batch_size, seq_len, output_size).
             If False, return log probabilities for the next event after the last step (batch_size, output_size).
+        return_attention : bool, default=False
+            If True, return a tuple of (log_probs, attentions) where attentions is a list
+            of attention weight tensors from each layer.
+        average_attn_weights : bool, default=True
+            If True, average attention weights across heads. If False, keep head dimension.
+        inputs_embeds : torch.Tensor, optional
+            Continuous input embeddings of shape (batch_size, seq_len, d_model) or (seq_len, d_model).
 
         Returns
         -------
-        out : torch.Tensor
-            Log probabilities over the event vocabulary.
+        out : torch.Tensor or Tuple[torch.Tensor, List[torch.Tensor]]
+            Log probabilities over the event vocabulary, and optionally attention matrices.
         """
-        if X.dim() == 1:
-            X = X.unsqueeze(0)
+        if X is None and inputs_embeds is None:
+            raise ValueError("Either X or inputs_embeds must be specified.")
 
-        X = X.to(torch.int64)
-        batch_size, seq_len = X.shape
+        if inputs_embeds is not None:
+            if inputs_embeds.dim() == 2:
+                inputs_embeds = inputs_embeds.unsqueeze(0)
+            batch_size, seq_len, _ = inputs_embeds.shape
+            device = inputs_embeds.device
+            h = inputs_embeds * math.sqrt(self.d_model)
+            h = self.pos_encoder(h)
+        else:
+            if X.dim() == 1:
+                X = X.unsqueeze(0)
+
+            X = X.to(torch.int64)
+            batch_size, seq_len = X.shape
+            device = X.device
+
+            # Embedding with sqrt(d_model) scaling
+            h = self.token_embedding(X) * math.sqrt(self.d_model)
+            h = self.pos_encoder(h)
 
         if seq_len > self.max_seq_len:
             raise ValueError(
@@ -254,25 +293,35 @@ class LogTransformer(nn.Module):
 
         # Causal mask ensuring position t only attends to positions <= t
         # Float mask with 0.0 for attend and -inf for masked positions
-        causal_mask = nn.Transformer.generate_square_subsequent_mask(seq_len, device=X.device)
-
-        # Embedding with sqrt(d_model) scaling
-        h = self.token_embedding(X) * math.sqrt(self.d_model)
-        h = self.pos_encoder(h)
+        causal_mask = nn.Transformer.generate_square_subsequent_mask(seq_len, device=device)
 
         # Pass through causal blocks
+        all_attentions: List[torch.Tensor] = []
         for layer in self.layers:
-            h = layer(h, attn_mask=causal_mask)
+            if return_attention:
+                h, attn = layer(
+                    h,
+                    attn_mask=causal_mask,
+                    need_weights=True,
+                    average_attn_weights=average_attn_weights,
+                )
+                all_attentions.append(attn)
+            else:
+                h = layer(h, attn_mask=causal_mask)
 
         h = self.final_norm(h)
 
         if return_all_tokens:
             logits = self.head(h)  # (batch_size, seq_len, output_size)
-            return self.softmax(logits)
+            out = self.softmax(logits)
         else:
             last_token = h[:, -1, :]  # (batch_size, d_model)
             logits = self.head(last_token)  # (batch_size, output_size)
-            return self.softmax(logits)
+            out = self.softmax(logits)
+
+        if return_attention:
+            return out, all_attentions
+        return out
 
     def predict(
         self,

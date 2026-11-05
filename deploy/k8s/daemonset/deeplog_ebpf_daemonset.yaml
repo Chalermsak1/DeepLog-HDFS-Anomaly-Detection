@@ -1,0 +1,188 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: deeplog-system
+  labels:
+    app.kubernetes.io/name: deeplog
+    app.kubernetes.io/part-of: deeplog-platform
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deeplog-ebpf-node
+  namespace: deeplog-system
+  labels:
+    app.kubernetes.io/name: deeplog-ebpf-probe
+    app.kubernetes.io/part-of: deeplog-platform
+    app.kubernetes.io/component: ebpf-probe
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: deeplog-ebpf-node
+  labels:
+    app.kubernetes.io/name: deeplog-ebpf-probe
+    app.kubernetes.io/part-of: deeplog-platform
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - nodes/status
+      - pods
+      - pods/status
+      - namespaces
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources:
+      - events
+    verbs: ["create", "patch"]
+  - apiGroups: ["deeplog.ai"]
+    resources:
+      - deeplogclusters
+      - deeplogpolicies
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: deeplog-ebpf-node-binding
+  labels:
+    app.kubernetes.io/name: deeplog-ebpf-probe
+    app.kubernetes.io/part-of: deeplog-platform
+subjects:
+  - kind: ServiceAccount
+    name: deeplog-ebpf-node
+    namespace: deeplog-system
+roleRef:
+  kind: ClusterRole
+  name: deeplog-ebpf-node
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: deeplog-ebpf-probe
+  namespace: deeplog-system
+  labels:
+    app.kubernetes.io/name: deeplog-ebpf-probe
+    app.kubernetes.io/part-of: deeplog-platform
+    app.kubernetes.io/component: ebpf-probe
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: deeplog-ebpf-probe
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: deeplog-ebpf-probe
+        app.kubernetes.io/part-of: deeplog-platform
+        app.kubernetes.io/component: ebpf-probe
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/ebpf-probe: unconfined
+    spec:
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      serviceAccountName: deeplog-ebpf-node
+      terminationGracePeriodSeconds: 30
+      tolerations:
+        - operator: Exists
+          effect: NoSchedule
+        - operator: Exists
+          effect: NoExecute
+      containers:
+        - name: ebpf-probe
+          image: deeplog/ebpf-probe:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - CAP_BPF
+                - CAP_PERFMON
+                - CAP_NET_ADMIN
+                - SYS_RESOURCE
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: BPF_FS_PATH
+              value: /sys/fs/bpf
+            - name: EBPF_RINGBUF_SIZE_MB
+              value: "64"
+            - name: SAMPLING_RATE
+              value: "1.0"
+            - name: LOG_LEVEL
+              value: INFO
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          volumeMounts:
+            - name: bpf-fs
+              mountPath: /sys/fs/bpf
+              mountPropagation: Bidirectional
+            - name: debugfs
+              mountPath: /sys/kernel/debug
+              mountPropagation: HostToContainer
+            - name: kernel-modules
+              mountPath: /lib/modules
+              readOnly: true
+            - name: kernel-src
+              mountPath: /usr/src
+              readOnly: true
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - test -e /sys/fs/bpf
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - test -e /sys/fs/bpf
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 2
+      volumes:
+        - name: bpf-fs
+          hostPath:
+            path: /sys/fs/bpf
+            type: DirectoryOrCreate
+        - name: debugfs
+          hostPath:
+            path: /sys/kernel/debug
+            type: DirectoryOrCreate
+        - name: kernel-modules
+          hostPath:
+            path: /lib/modules
+            type: Directory
+        - name: kernel-src
+          hostPath:
+            path: /usr/src
+            type: DirectoryOrCreate

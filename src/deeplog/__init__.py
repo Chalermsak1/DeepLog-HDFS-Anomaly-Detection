@@ -168,6 +168,27 @@ from .formal_safety import (
     GuardDecision,
     SafetyClusterState,
 )
+from .copilot import (
+    SRECopilot,
+    CopilotResponse,
+    CopilotIntent,
+    CommandSafetyLevel,
+    CodeSnippet,
+    CLICommand,
+    SafetyProofReport,
+    CopilotContext,
+    BaseLLMBackend,
+    RuleBasedExpertBackend,
+    MockLLMBackend,
+    CallableLLMBackend,
+    HTTPLLMBackend,
+)
+from .k8s_manager import (
+    K8sManager,
+    ManifestValidationResult,
+    ClusterStatusInspection,
+    PolicyEvaluationResult,
+)
 
 __all__ = [
     "DeepLog",
@@ -302,4 +323,21 @@ __all__ = [
     "GuardAction",
     "GuardDecision",
     "SafetyClusterState",
+    "SRECopilot",
+    "CopilotResponse",
+    "CopilotIntent",
+    "CommandSafetyLevel",
+    "CodeSnippet",
+    "CLICommand",
+    "SafetyProofReport",
+    "CopilotContext",
+    "BaseLLMBackend",
+    "RuleBasedExpertBackend",
+    "MockLLMBackend",
+    "CallableLLMBackend",
+    "HTTPLLMBackend",
+    "K8sManager",
+    "ManifestValidationResult",
+    "ClusterStatusInspection",
+    "PolicyEvaluationResult",
 ]

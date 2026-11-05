@@ -1,0 +1,374 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: deeplogclusters.deeplog.ai
+  labels:
+    app.kubernetes.io/name: deeplog
+    app.kubernetes.io/part-of: deeplog-platform
+    app.kubernetes.io/component: crd
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+    description: Production CustomResourceDefinition for DeepLog distributed clusters
+spec:
+  group: deeplog.ai
+  names:
+    kind: DeepLogCluster
+    listKind: DeepLogClusterList
+    plural: deeplogclusters
+    singular: deeplogcluster
+    shortNames:
+      - dlc
+      - dlcluster
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+        scale:
+          specReplicasPath: .spec.replicas
+          statusReplicasPath: .status.readyReplicas
+      additionalPrinterColumns:
+        - name: Status
+          type: string
+          jsonPath: .status.phase
+        - name: Desired
+          type: integer
+          jsonPath: .spec.replicas
+        - name: Ready
+          type: integer
+          jsonPath: .status.readyReplicas
+        - name: eBPF-Nodes
+          type: integer
+          jsonPath: .status.ebpfNodesActive
+        - name: Anomalies
+          type: integer
+          jsonPath: .status.anomaliesDetected
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: DeepLogCluster defines a managed deployment of DeepLog anomaly detection cluster.
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - replicas
+              properties:
+                replicas:
+                  type: integer
+                  minimum: 1
+                  maximum: 1000
+                  default: 3
+                  description: Number of DeepLog inference engine replicas.
+                image:
+                  type: string
+                  default: deeplog/engine:latest
+                  description: Container image for DeepLog workers.
+                imagePullPolicy:
+                  type: string
+                  enum:
+                    - Always
+                    - IfNotPresent
+                    - Never
+                  default: IfNotPresent
+                modelPath:
+                  type: string
+                  default: /models/deeplog_model_full.pt
+                  description: Path or URI to the neural log anomaly detection model.
+                ebpfProbe:
+                  type: object
+                  description: Configuration for host-level native eBPF telemetry probe.
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: true
+                    bpfMountPath:
+                      type: string
+                      default: /sys/fs/bpf
+                    ringBufferSizeMb:
+                      type: integer
+                      minimum: 1
+                      maximum: 1024
+                      default: 64
+                    samplingRate:
+                      type: number
+                      minimum: 0.0
+                      maximum: 1.0
+                      default: 1.0
+                    dropNormalEvents:
+                      type: boolean
+                      default: true
+                resources:
+                  type: object
+                  description: Compute resources allocated to DeepLog inference pods.
+                  properties:
+                    limits:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                        memory:
+                          type: string
+                        nvidia.com/gpu:
+                          type: string
+                    requests:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                        memory:
+                          type: string
+                storage:
+                  type: object
+                  description: Persistent storage configuration for model checkpoints and logs.
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: false
+                    storageClassName:
+                      type: string
+                    size:
+                      type: string
+                      default: 10Gi
+                federation:
+                  type: object
+                  description: Federated Threat Mesh configuration for cross-cluster privacy-preserving learning.
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: false
+                    meshPort:
+                      type: integer
+                      default: 9443
+                    privacyBudgetEpsilon:
+                      type: number
+                      default: 1.0
+                    peers:
+                      type: array
+                      items:
+                        type: string
+                safetyFilter:
+                  type: object
+                  description: Control Barrier Function (CBF) and formal safety filter settings.
+                  properties:
+                    enabled:
+                      type: boolean
+                      default: true
+                    maxOscillationFrequency:
+                      type: number
+                      default: 0.5
+                    barrierDecayGamma:
+                      type: number
+                      default: 0.1
+            status:
+              type: object
+              description: Current operational status of the DeepLogCluster.
+              properties:
+                phase:
+                  type: string
+                  enum:
+                    - Pending
+                    - Initializing
+                    - Running
+                    - Degraded
+                    - Failed
+                readyReplicas:
+                  type: integer
+                  default: 0
+                totalReplicas:
+                  type: integer
+                  default: 0
+                ebpfNodesActive:
+                  type: integer
+                  default: 0
+                anomaliesDetected:
+                  type: integer
+                  default: 0
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - status
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      lastTransitionTime:
+                        type: string
+                      reason:
+                        type: string
+                      message:
+                        type: string
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: deeplogpolicies.deeplog.ai
+  labels:
+    app.kubernetes.io/name: deeplog
+    app.kubernetes.io/part-of: deeplog-platform
+    app.kubernetes.io/component: crd
+  annotations:
+    description: Production CustomResourceDefinition for DeepLog real-time anomaly detection policies
+spec:
+  group: deeplog.ai
+  names:
+    kind: DeepLogPolicy
+    listKind: DeepLogPolicyList
+    plural: deeplogpolicies
+    singular: deeplogpolicy
+    shortNames:
+      - dlp
+      - dlpolicy
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - name: Mode
+          type: string
+          jsonPath: .spec.detectionMode
+        - name: Action
+          type: string
+          jsonPath: .spec.action
+        - name: Threshold
+          type: number
+          jsonPath: .spec.anomalyThreshold
+        - name: Active
+          type: boolean
+          jsonPath: .status.active
+        - name: Violations
+          type: integer
+          jsonPath: .status.violations
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: DeepLogPolicy specifies detection sensitivity and mitigation actions.
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - detectionMode
+                - action
+              properties:
+                detectionMode:
+                  type: string
+                  enum:
+                    - native-ebpf
+                    - semantic
+                    - physics
+                    - neuro-symbolic
+                    - ensemble
+                  default: ensemble
+                  description: Detection model engine.
+                action:
+                  type: string
+                  enum:
+                    - Alert
+                    - Quarantine
+                    - Remediate
+                    - Block
+                    - Evict
+                  default: Alert
+                  description: Autonomous mitigation response when an anomaly is confirmed.
+                anomalyThreshold:
+                  type: number
+                  minimum: 0.0
+                  maximum: 1.0
+                  default: 0.85
+                  description: Confidence score threshold for triggering action.
+                consecutiveViolations:
+                  type: integer
+                  minimum: 1
+                  default: 3
+                  description: Number of anomalous events before firing alert/mitigation.
+                targetWorkloads:
+                  type: object
+                  description: Selector specifying which pods or namespaces this policy monitors.
+                  properties:
+                    namespaces:
+                      type: array
+                      items:
+                        type: string
+                    matchLabels:
+                      type: object
+                      additionalProperties:
+                        type: string
+                rules:
+                  type: array
+                  description: Custom behavioral safety invariants or detection rules.
+                  items:
+                    type: object
+                    required:
+                      - name
+                      - condition
+                    properties:
+                      name:
+                        type: string
+                      condition:
+                        type: string
+                      severity:
+                        type: string
+                        enum:
+                          - Low
+                          - Medium
+                          - High
+                          - Critical
+                        default: High
+                alertChannels:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - endpoint
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - slack
+                          - webhook
+                          - pagerduty
+                          - prometheus
+                      endpoint:
+                        type: string
+                      secretRef:
+                        type: string
+            status:
+              type: object
+              description: Current enforcement status of the policy.
+              properties:
+                active:
+                  type: boolean
+                  default: true
+                matchedPods:
+                  type: integer
+                  default: 0
+                violations:
+                  type: integer
+                  default: 0
+                lastTriggered:
+                  type: string

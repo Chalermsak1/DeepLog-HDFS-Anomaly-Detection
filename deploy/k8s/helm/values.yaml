@@ -1,0 +1,145 @@
+# Default values for deeplog Helm chart.
+# Production-ready AI-driven observability and eBPF anomaly detection.
+
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  clusterDomain: cluster.local
+
+# Controller / Inference Engine configuration
+controller:
+  replicaCount: 3
+  image:
+    repository: deeplog/engine
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+  modelPath: /models/deeplog_model_full.pt
+  logLevel: INFO
+  port: 8080
+  grpcPort: 9090
+  metricsPort: 9100
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+  tolerations: []
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - controller
+            topologyKey: kubernetes.io/hostname
+
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+# Native eBPF Kernel Probe DaemonSet configuration
+ebpfProbe:
+  enabled: true
+  image:
+    repository: deeplog/ebpf-probe
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+
+  hostPID: true
+  hostNetwork: true
+
+  bpfMountPath: /sys/fs/bpf
+  ringBufferSizeMb: 64
+  samplingRate: 1.0
+  dropNormalEvents: true
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+  securityContext:
+    privileged: true
+    capabilities:
+      add:
+        - SYS_ADMIN
+        - CAP_BPF
+        - CAP_PERFMON
+        - CAP_NET_ADMIN
+        - SYS_RESOURCE
+
+  tolerations:
+    - operator: Exists
+      effect: NoSchedule
+    - operator: Exists
+      effect: NoExecute
+
+# Service configuration
+service:
+  type: ClusterIP
+  httpPort: 8080
+  grpcPort: 9090
+  metricsPort: 9100
+  annotations: {}
+
+# RBAC configuration
+rbac:
+  create: true
+
+# ServiceAccount configuration
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Prometheus ServiceMonitor integration
+monitoring:
+  serviceMonitor:
+    enabled: false
+    interval: 15s
+    scrapeTimeout: 10s
+    labels:
+      release: prometheus
+
+# Federated Threat Mesh
+federation:
+  enabled: false
+  meshPort: 9443
+  privacyBudgetEpsilon: 1.0
+  peers: []
+
+# Formal Safety Filter & Control Barrier Functions
+safetyFilter:
+  enabled: true
+  maxOscillationFrequency: 0.5
+  barrierDecayGamma: 0.1
+
+# Deploy default DeepLogCluster Custom Resource
+customResource:
+  create: true
+  clusterName: deeplog-primary

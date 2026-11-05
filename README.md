@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.13%2B-orange.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-430%20Passed-success.svg)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-532%20Passed-success.svg)](tests/)
 [![F1-Score SOTA](https://img.shields.io/badge/SOTA%20F1-72.23%25-brightgreen.svg)](#official-experimental-results)
 [![Inference Latency](https://img.shields.io/badge/HDC%20Latency-0.29%20%CE%BCs-purple.svg)](#pillar-i-zero-io-in-kernel-ebpf--hyperdimensional-computing-hdc)
 [![Formal Verification](https://img.shields.io/badge/Safety-CBF%20%26%20Lyapunov%20Verified-blueviolet.svg)](#frontier-4-provable-safety--formal-verification-cbf--lyapunov-stability)
@@ -37,6 +37,11 @@ An enterprise-grade, empirical implementation and architectural evolution of **D
    - **Frontier 3: Autonomous Chaos Gym & Adversarial Red/Blue Self-Play**: Distributed cluster MDP environment with Actor-Critic `RedChaosAgent` (injecting packet loss, split-brain, slowloris) and `BlueImmuneAgent` (**95.5% blast radius reduction, 100% SLA availability**).
    - **Frontier 4: Provable Safety & Formal Verification (CBF & Lyapunov Stability)**: Quadratic Programming (QP) safety filter enforcing Control Barrier Functions $h(x) \ge 0$, Discrete Lyapunov drift verification $\Delta V \le -\kappa V$, and fail-safe emergency guards.
    - **Frontier 5: Federated Zero-Knowledge Threat Sharing Mesh**: Decentralized P2P gossip mesh sharing 10,000-bit threat hypervectors with Differential Privacy masking ($\epsilon$-calibrated Bernoulli noise) and Schnorr Curve25519 Non-Interactive Zero-Knowledge (NIZK) proofs.
+6. **DeepLog Mission Control Platform & Kubernetes-Native Operations**:
+   - **Mission Control Cockpit Web UI (`app.py`)**: 6-tab unified interface (SOTA Benchmark Explorer, Multi-Modal OTel MELT Stream, Chaos Gym Playground, Provable Safety Radar, Neuro-Symbolic AST Patch Viewer, Federated ZK Threat Mesh).
+   - **Grand Showcase Demonstrator (`scripts/demo_infinity_showcase.py`)**: End-to-end interactive CLI demonstration across all 7 deep pillars with colorized output and JSON artifact export.
+   - **Conversational AI SRE Copilot (`src/deeplog/copilot.py`)**: Multi-turn intelligent incident response, formal CBF invariant proof explanation, AST causality tracing, and automated Git patch generation.
+   - **Cloud-Native Kubernetes Operator & Helm (`deploy/k8s/`, `src/deeplog/k8s_manager.py`)**: `DeepLogCluster` & `DeepLogPolicy` CRDs, privileged eBPF DaemonSet with hostPID/hostNetwork, and pure-Python zero-dependency Helm templating engine.
 
 ---
 
@@ -48,6 +53,7 @@ An enterprise-grade, empirical implementation and architectural evolution of **D
 - [DeepLog 3.0 Multi-Modal AIOps Engines](#deeplog-30-multi-modal-aiops-engines)
 - [DeepLog-Omni: Autonomous Neuro-Immune Frontiers](#deeplog-omni-autonomous-neuro-immune-frontiers)
 - [DeepLog-Infinity: 5 Cutting-Edge Frontiers](#deeplog-infinity-5-cutting-edge-frontiers)
+- [DeepLog Mission Control Platform & Kubernetes Deployment](#deeplog-mission-control-platform--kubernetes-deployment)
 - [Project Structure](#project-structure)
 - [Quickstart & Reproducibility Guide](#quickstart--reproducibility-guide)
 - [Interactive Streamlit Dashboard](#interactive-streamlit-dashboard)
@@ -181,6 +187,44 @@ Numerical parity between native PyTorch and TorchScript JIT is verified: $\max |
 
 ---
 
+## DeepLog Mission Control Platform & Kubernetes Deployment
+
+### 1. Mission Control Cockpit Web UI (`app.py`)
+A reactive 6-tab Streamlit mission control cockpit providing real-time visibility, automated telemetry streaming, and interactive intervention:
+- **Tab 1: SOTA Benchmarks & Live Sequence Diagnoser**: Interactive parameter configuration ($g$, $c$, $\tau$, NLL scoring) and instant anomaly classification with multi-event probability distributions.
+- **Tab 2: Multi-Modal OTel MELT Stream**: Live visualization of synchronized Metrics (gauges/counters), Distributed Traces, Event Logs, and Continuous eBPF Flamegraph Profiles with cross-modal root-cause attribution.
+- **Tab 3: Chaos Gym Playground**: Adversarial simulation console hosting Red Chaos Agents (injecting packet drops, thread storms, Byzantine delays) vs. Blue Immune Agents defending cluster SLA.
+- **Tab 4: Provable Safety Radar**: Real-time Quadratic Program (QP) polytope solver enforcing Control Barrier Functions ($h(\mathbf{x}) \ge 0$) and Discrete Lyapunov stability ($\Delta V \le -\kappa V$) radar displays.
+- **Tab 5: Neuro-Symbolic AST Patch Viewer**: Interactive Java source code mapping (`DataXceiver.java`, `BlockReceiver.java`), syntax-highlighted Git `.patch` unified diffs, and auto-generated JUnit test suites.
+- **Tab 6: Federated ZK Threat Mesh**: Peer-to-peer node topology, 10,000-bit holographic threat hypervector sharing, Differential Privacy noise controls ($\epsilon$), and Curve25519 NIZK proof verification status.
+
+### 2. Conversational AI SRE Copilot (`src/deeplog/copilot.py`)
+- **Interactive Multi-Turn Dialogue**: Context-aware SRE partner maintaining conversational state across incidents, diagnostics, and remediations.
+- **Formal Verification Explanations**: Translates complex Quadratic Program (QP) safety projections, Control Barrier Function boundaries, and Lyapunov drift inequalities into plain-English operator briefings.
+- **Automated Root-Cause & Patch Synthesis**: Queries the AST Shadow Graph to trace anomaly provenance directly to Java methods, generating copy-paste Git diffs and remediation commands.
+- **Pluggable Architecture**: Built-in deterministic `RuleBasedExpertBackend` ensuring complete functionality out-of-the-box with optional external LLM endpoints.
+
+### 3. Grand Showcase Demonstrator (`scripts/demo_infinity_showcase.py`)
+- Master CLI demonstrator executing all 7 core pillars sequentially in under 5 seconds:
+  1. *Sub-Microsecond eBPF & HDC Holographic Ingestion*
+  2. *Multi-Modal OTel MELT Telemetry Fusion*
+  3. *Adversarial Chaos Gym Red vs. Blue Tournament*
+  4. *Formal Safety Verification & Control Barrier Functions*
+  5. *AST Source Code Provenance & Git Patch Synthesis*
+  6. *Decentralized Federated Threat Mesh & Curve25519 NIZK Verification*
+  7. *AI SRE Copilot Interactive Incident Response*
+- Features rich ANSI terminal formatting, step-by-step progress bars, and `--headless` / `--export-json` options for automated CI/CD integration.
+
+### 4. Cloud-Native Kubernetes Operator & Helm Architecture (`deploy/k8s/`, `src/deeplog/k8s_manager.py`)
+- **Custom Resource Definitions (CRDs)**:
+  - `DeepLogCluster` (`crd/deeplog_crd.yaml`): Declarative specification for cluster orchestration, neural backbones, eBPF probe modes, and mesh federations.
+  - `DeepLogPolicy` (`crd/deeplog_crd.yaml`): Runtime safety boundaries, CBF invariant definitions, Lyapunov decay coefficients, and automated remediation action whitelists.
+- **Privileged eBPF Probe DaemonSet**: Deploys `deeplog-ebpf-probe` across every Kubernetes node with `hostPID: true`, `hostNetwork: true`, and bidirectional ring buffer mounts (`/sys/kernel/debug`).
+- **Production Helm Chart (`deploy/k8s/helm/`)**: Standardized Helm v2/v3 chart packaging RBAC, ServiceAccounts, ConfigMaps, Controller Deployments, DaemonSets, and HorizontalPodAutoscalers (HPA).
+- **Pure-Python K8s Manager (`src/deeplog/k8s_manager.py`)**: Zero-dependency YAML manifest parser, validator, and custom resource orchestrator compatible with standard Kubernetes clusters.
+
+---
+
 ## Project Structure
 
 ```
@@ -189,7 +233,26 @@ DeepLog/
 ├── LICENSE                            # MIT License
 ├── requirements.txt                   # Pinned project dependencies
 ├── setup.py                           # Local editable package setup
-├── app.py                             # Interactive Streamlit dashboard
+├── app.py                             # Mission Control Cockpit (Streamlit 6-tab dashboard)
+│
+├── deploy/                            # Cloud-Native Kubernetes & Helm Artifacts
+│   └── k8s/
+│       ├── crd/
+│       │   └── deeplog_crd.yaml       # DeepLogCluster & DeepLogPolicy CRDs
+│       ├── daemonset/
+│       │   └── deeplog_ebpf_daemonset.yaml # Privileged eBPF node probe
+│       └── helm/                      # Production Helm v2/v3 chart
+│           ├── Chart.yaml
+│           ├── values.yaml
+│           └── templates/
+│               ├── serviceaccount.yaml
+│               ├── rbac.yaml
+│               ├── configmap.yaml
+│               ├── daemonset.yaml
+│               ├── deployment.yaml
+│               ├── service.yaml
+│               ├── hpa.yaml
+│               └── deeplog-cluster.yaml
 │
 ├── src/deeplog/                       # Core DeepLog, Omni & Infinity Package
 │   ├── __init__.py                    # Public package API exports
@@ -217,9 +280,12 @@ DeepLog/
 │   ├── otel_melt.py                   # Full-Stack Multi-Modal OTel Convergence (MELT)
 │   ├── chaos_gym.py                   # ChaosEnvironment & Adversarial Red/Blue Self-Play
 │   ├── formal_safety.py               # Control Barrier Functions (CBF) & Lyapunov Safety
-│   └── federated_mesh.py              # Zero-Knowledge Federated Threat Sharing Mesh
+│   ├── federated_mesh.py              # Zero-Knowledge Federated Threat Sharing Mesh
+│   ├── copilot.py                     # Conversational AI SRE Copilot & CBF explainer
+│   └── k8s_manager.py                 # Pure-Python K8s CRD & Helm orchestrator
 │
 ├── scripts/                           # Production benchmarks & simulation scripts
+│   ├── demo_infinity_showcase.py      # Grand Showcase Demonstrator (7 core pillars)
 │   ├── train.py                       # LSTM training script
 │   ├── evaluate.py                    # Baseline benchmark evaluator
 │   ├── evaluate_advanced_scoring.py   # 570,204 blocks advanced scoring benchmark
@@ -227,7 +293,7 @@ DeepLog/
 │   ├── streaming_simulator.py         # Multi-node live log ingestion simulator
 │   └── predict.py                     # CLI sequence anomaly diagnoser
 │
-├── tests/                             # 430 Automated Unit Tests (100% Pass Rate)
+├── tests/                             # 532 Automated Unit Tests (100% Pass Rate)
 │   ├── test_mapping.py                # Vocabulary consistency tests
 │   ├── test_preprocessor.py           # Slicing and padding tests
 │   ├── test_model.py                  # PyTorch model forward pass tests
@@ -249,7 +315,11 @@ DeepLog/
 │   ├── test_otel_melt.py              # Multi-Modal OTel MELT fusion tests (20 tests)
 │   ├── test_chaos_gym.py              # Chaos gym & self-play tests (29 tests)
 │   ├── test_formal_safety.py          # Control Barrier Functions & Lyapunov tests (26 tests)
-│   └── test_federated_mesh.py         # Federated zero-knowledge threat mesh tests (32 tests)
+│   ├── test_federated_mesh.py         # Federated zero-knowledge threat mesh tests (32 tests)
+│   ├── test_demo_showcase.py          # Grand Showcase Demonstrator CLI tests (27 tests)
+│   ├── test_ui_app.py                 # Mission Control Cockpit UI tests (15 tests)
+│   ├── test_copilot.py                # AI SRE Copilot & dialogue tests (33 tests)
+│   └── test_k8s_deploy.py             # Kubernetes CRD & Helm manager tests (27 tests)
 │
 ├── dataset/HDFS_v1/                   # 29 HDFS templates & preprocessed traces
 └── results/                           # Publication figures and exported metrics
@@ -271,31 +341,40 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-### 2. Run Complete Unit Test Suite (430 Tests, 100% Pass Rate)
+### 2. Run Complete Unit Test Suite (532 Tests, 100% Pass Rate)
 ```bash
 pytest tests/ -v
 ```
 
-### 3. Run Advanced Scoring Benchmark (570,204 Evaluation Blocks)
+### 3. Run Grand Showcase Master Demonstrator (All 7 Deep Pillars)
+```bash
+# Interactive ANSI terminal mode
+python scripts/demo_infinity_showcase.py
+
+# Headless mode with JSON artifact export
+python scripts/demo_infinity_showcase.py --headless --export-json results/showcase_report.json
+```
+
+### 4. Run Advanced Scoring Benchmark (570,204 Evaluation Blocks)
 ```bash
 python scripts/evaluate_advanced_scoring.py --model_path deeplog_model_improved_v1.pt
 ```
 
-### 4. Run Sub-Millisecond Serving & Throughput Benchmark
+### 5. Run Sub-Millisecond Serving & Throughput Benchmark
 ```bash
 python scripts/benchmark_serving.py --model_path deeplog_model_improved_v1.pt --device cpu
 ```
 
-### 5. Run Live Multi-Node Streaming Simulator
+### 6. Run Live Multi-Node Streaming Simulator
 ```bash
 python scripts/streaming_simulator.py --max_events 5000 --use_jit
 ```
 
 ---
 
-## Interactive Streamlit Dashboard
+## Interactive Streamlit Dashboard (Mission Control Cockpit)
 
-Launch the interactive local web dashboard:
+Launch the interactive local web dashboard (6 tabs with OTel MELT, Chaos Gym, Safety Radar, AST Viewer, ZK Mesh):
 ```bash
 streamlit run app.py
 ```

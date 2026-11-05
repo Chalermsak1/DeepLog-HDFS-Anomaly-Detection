@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "deeplog.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "deeplog.labels" . | nindent 4 }}
+data:
+  MODEL_PATH: {{ .Values.controller.modelPath | quote }}
+  LOG_LEVEL: {{ .Values.controller.logLevel | quote }}
+  CONTROLLER_PORT: {{ .Values.controller.port | quote }}
+  GRPC_PORT: {{ .Values.controller.grpcPort | quote }}
+  METRICS_PORT: {{ .Values.controller.metricsPort | quote }}
+  EBPF_ENABLED: {{ .Values.ebpfProbe.enabled | quote }}
+  BPF_MOUNT_PATH: {{ .Values.ebpfProbe.bpfMountPath | quote }}
+  EBPF_RING_BUFFER_SIZE_MB: {{ .Values.ebpfProbe.ringBufferSizeMb | quote }}
+  SAMPLING_RATE: {{ .Values.ebpfProbe.samplingRate | quote }}
+  DROP_NORMAL_EVENTS: {{ .Values.ebpfProbe.dropNormalEvents | quote }}
+  FEDERATION_ENABLED: {{ .Values.federation.enabled | quote }}
+  FEDERATION_PORT: {{ .Values.federation.meshPort | quote }}
+  SAFETY_FILTER_ENABLED: {{ .Values.safetyFilter.enabled | quote }}
+  MAX_OSCILLATION_FREQUENCY: {{ .Values.safetyFilter.maxOscillationFrequency | quote }}
+  BARRIER_DECAY_GAMMA: {{ .Values.safetyFilter.barrierDecayGamma | quote }}

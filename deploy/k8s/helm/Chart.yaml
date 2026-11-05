@@ -1,0 +1,22 @@
+apiVersion: v2
+name: deeplog
+description: Production Helm chart for DeepLog - AI-Driven Observability, eBPF Kernel Probes & Anomaly Detection Platform
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - deeplog
+  - ebpf
+  - observability
+  - anomaly-detection
+  - ai-ops
+  - machine-learning
+home: https://github.com/deeplog/deeplog
+sources:
+  - https://github.com/deeplog/deeplog
+maintainers:
+  - name: DeepLog Engineering Team
+    email: dev@deeplog.ai
+annotations:
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/category: monitoring

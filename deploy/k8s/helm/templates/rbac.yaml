@@ -1,0 +1,49 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "deeplog.fullname" . }}
+  labels:
+    {{- include "deeplog.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - nodes/status
+      - pods
+      - pods/status
+      - namespaces
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources:
+      - events
+    verbs: ["create", "patch"]
+  - apiGroups: ["deeplog.ai"]
+    resources:
+      - deeplogclusters
+      - deeplogclusters/status
+      - deeplogclusters/scale
+      - deeplogpolicies
+      - deeplogpolicies/status
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources:
+      - daemonsets
+      - deployments
+    verbs: ["get", "list", "watch", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "deeplog.fullname" . }}-binding
+  labels:
+    {{- include "deeplog.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "deeplog.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "deeplog.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

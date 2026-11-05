@@ -1,0 +1,32 @@
+{{- if .Values.customResource.create -}}
+apiVersion: deeplog.ai/v1alpha1
+kind: DeepLogCluster
+metadata:
+  name: {{ default (include "deeplog.fullname" .) .Values.customResource.clusterName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "deeplog.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.controller.replicaCount }}
+  image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}"
+  imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+  modelPath: {{ .Values.controller.modelPath | quote }}
+  ebpfProbe:
+    enabled: {{ .Values.ebpfProbe.enabled }}
+    bpfMountPath: {{ .Values.ebpfProbe.bpfMountPath | quote }}
+    ringBufferSizeMb: {{ .Values.ebpfProbe.ringBufferSizeMb }}
+    samplingRate: {{ .Values.ebpfProbe.samplingRate }}
+    dropNormalEvents: {{ .Values.ebpfProbe.dropNormalEvents }}
+  resources:
+    {{- toYaml .Values.controller.resources | nindent 4 }}
+  federation:
+    enabled: {{ .Values.federation.enabled }}
+    meshPort: {{ .Values.federation.meshPort }}
+    privacyBudgetEpsilon: {{ .Values.federation.privacyBudgetEpsilon }}
+    peers:
+      {{- toYaml .Values.federation.peers | nindent 6 }}
+  safetyFilter:
+    enabled: {{ .Values.safetyFilter.enabled }}
+    maxOscillationFrequency: {{ .Values.safetyFilter.maxOscillationFrequency }}
+    barrierDecayGamma: {{ .Values.safetyFilter.barrierDecayGamma }}
+{{- end }}

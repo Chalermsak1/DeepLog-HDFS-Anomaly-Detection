@@ -5,7 +5,8 @@
 % ------------------------------------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{amsmath,amsthm}
+\usepackage{newtxtext,newtxmath}
 \usepackage{booktabs}
 \usepackage{microtype}
 \usepackage{hyperref}
@@ -66,7 +67,7 @@ Evaluated on the full corpus of 570,204 HDFS production test blocks comprising 1
 % ------------------------------------------------------------------------------
 \section{Introduction}
 \label{sec:intro}
-Distributed cloud platforms—orchestrating massive clusters running the Hadoop Distributed File System (HDFS)~\cite{shvachko2010hadoop}, Apache Kafka, and Kubernetes microservices—are plagued by silent data corruption, cascading timeouts, and adversarial resource exhaustion attacks. System logs represent the definitive ground truth of application execution paths. In 2017, the seminal work \textit{DeepLog}~\cite{du2017deeplog} pioneered the paradigm of treating log keys as structured natural language tokens, employing stacked Long Short-Term Memory (LSTM) recurrent neural networks to predict next-event likelihoods and flag unexpected sequence deviations. Subsequent architectures, such as LogAnomaly~\cite{meng2019loganomaly} and LogRobust~\cite{zhang2019logrobust}, extended this formulation by incorporating template-derived semantic vectors and attention mechanisms to combat semantic drift and noisy message templates.
+Distributed cloud platforms---orchestrating massive clusters running the Hadoop Distributed File System (HDFS)~\cite{shvachko2010hadoop}, Apache Kafka, and Kubernetes microservices---are plagued by silent data corruption, cascading timeouts, and adversarial resource exhaustion attacks. System logs represent the definitive ground truth of application execution paths. In 2017, the seminal work \textit{DeepLog}~\cite{du2017deeplog} pioneered the paradigm of treating log keys as structured natural language tokens, employing stacked Long Short-Term Memory (LSTM) recurrent neural networks to predict next-event likelihoods and flag unexpected sequence deviations. Subsequent architectures, such as LogAnomaly~\cite{meng2019loganomaly} and LogRobust~\cite{zhang2019logrobust}, extended this formulation by incorporating template-derived semantic vectors and attention mechanisms to combat semantic drift and noisy message templates.
 
 Despite these pioneering contributions, modern hyperscale cloud operations have revealed four critical bottlenecks that prevent classical log anomaly architectures from achieving turnkey autonomy:
 
@@ -77,7 +78,7 @@ Despite these pioneering contributions, modern hyperscale cloud operations have 
     \item \textbf{Siloed Threat Intelligence:} Zero-day attacks and widespread hardware flaws impact multiple cloud providers simultaneously. However, cross-enterprise threat intelligence sharing is forbidden by privacy regulations (GDPR, HIPAA) because raw logs contain proprietary IPs, hostnames, and user payloads.
 \end{enumerate}
 
-To overcome these structural limitations, we introduce \textbf{DeepLog-Infinity}, an autonomous, end-to-end neuro-immune system. DeepLog-Infinity redesigns log anomaly detection across the entire systems stack—from in-kernel telemetry capture to formal control theory and cryptographic privacy.
+To overcome these structural limitations, we introduce \textbf{DeepLog-Infinity}, an autonomous, end-to-end neuro-immune system. DeepLog-Infinity redesigns log anomaly detection across the entire systems stack---from in-kernel telemetry capture to formal control theory and cryptographic privacy.
 
 \noindent\textbf{Key Contributions:}
 \begin{itemize}[leftmargin=*]
@@ -161,12 +162,15 @@ Distributed clusters obey physical conservation laws governing finite queues. In
 where $\gamma_i$ is exogenous ingress and $P_{ji}$ is the routing probability matrix. Little's Law~\cite{little1961proof} requires that the mean number of concurrent requests $L_i$ satisfies $L_i = \lambda_i W_i$. DeepLog-Infinity augments the empirical neural loss $\mathcal{L}_{\text{NLL}}$ with an axiomatic physical penalty:
 \begin{equation}
 \label{eq:physics_loss}
-\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{NLL}} + \mu_{\text{phys}} \sum_{i=1}^M \left( |L_i - \lambda_i W_i|^2 + \beta \max(0, \rho_i - 1 + \epsilon)^2 \right)
+\begin{split}
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{NLL}} + \mu_{\text{phys}} \sum_{i=1}^M \Big( &|L_i - \lambda_i W_i|^2 \\
+&+ \beta \max(0, \rho_i - 1 + \epsilon)^2 \Big)
+\end{split}
 \end{equation}
 This penalty mathematically prevents the network from accepting predictions where queue depths violate flow conservation.
 
 \subsection{Pillar IV: Neuro-Symbolic AST Duality}
-Unlike black-box anomaly detectors that output arbitrary cluster IDs, DeepLog-Infinity links each of the 29 HDFS event templates to concrete Java Abstract Syntax Tree (AST) coordinates within the Hadoop codebase (e.g., \texttt{org.apache.hadoop.hdfs.server.datanode.DataXceiver}). 
+Unlike black-box anomaly detectors that output arbitrary cluster IDs, DeepLog-Infinity links each of the 29 HDFS event templates to concrete Java Abstract Syntax Tree (AST) coordinates within the Hadoop codebase (e.g., \texttt{org.apache.hadoop.hdfs.}\allowbreak\texttt{server.datanode.DataXceiver}). 
 
 Upon detecting an anomaly, the \texttt{NeuroSymbolicBridge} performs backward path tracing across the call graph, identifies the faulting method (e.g., socket read timeout in \texttt{BlockReceiver.receiveBlock()}), inspects historical Git commits via \texttt{git blame}, and synthesizes a verifiable unified diff patch (\texttt{.patch}) along with an executable JUnit regression test.
 
@@ -179,7 +183,10 @@ The \texttt{CounterfactualDreamer} executes imagined rollouts up to $H = 300$ se
 Automated control actions $\mathbf{u} \in \mathcal{U}$ (e.g., pod eviction, thread pool resizing) are screened by a Quadratic Programming (QP) safety filter. The safety set $\mathcal{C}$ is characterized by Control Barrier Functions (CBF) $h(\mathbf{x}) \ge 0$. Any proposed mitigation $\mathbf{u}_{\text{nominal}}$ from the AI agent is minimally projected onto the forward-invariant half-space:
 \begin{equation}
 \label{eq:cbf_qp}
-\min_{\mathbf{u}} \frac{1}{2}\|\mathbf{u} - \mathbf{u}_{\text{nominal}}\|^2 \quad \text{s.t.} \quad L_f h(\mathbf{x}) + L_g h(\mathbf{x})\mathbf{u} + \alpha(h(\mathbf{x})) \ge 0
+\begin{split}
+\min_{\mathbf{u}} \;\; & \frac{1}{2}\|\mathbf{u} - \mathbf{u}_{\text{nominal}}\|^2 \\
+\text{s.t.} \;\; & L_f h(\mathbf{x}) + L_g h(\mathbf{x})\mathbf{u} + \alpha(h(\mathbf{x})) \ge 0
+\end{split}
 \end{equation}
 Furthermore, the closed-loop system is certified by a Discrete Lyapunov Stability Verifier enforcing $\Delta V(\mathbf{x}_t) = V(\mathbf{x}_{t+1}) - V(\mathbf{x}_t) \le -\kappa V(\mathbf{x}_t)$, guaranteeing that remediations decay exponentially back to steady-state equilibrium without inducing thundering-herd oscillations.
 
@@ -278,9 +285,10 @@ Since $0 < \kappa \le 1$, we have $|1 - \kappa| < 1$. Taking the limit as $t \to
 \limsup_{t \to \infty} V(\mathbf{e}_t) \le \frac{\zeta}{\kappa}
 \end{equation}
 By Rayleigh-Ritz theorem, $\lambda_{\min}(\mathbf{P}) \|\mathbf{e}_t\|^2 \le V(\mathbf{e}_t) \le \lambda_{\max}(\mathbf{P}) \|\mathbf{e}_t\|^2$. Thus:
-\begin{equation}
-\|\mathbf{e}_t\| \le \sqrt{\frac{V(\mathbf{e}_t)}{\lambda_{\min}(\mathbf{P})}} \le \sqrt{\frac{\lambda_{\max}(\mathbf{P})}{\lambda_{\min}(\mathbf{P})}} (1 - \kappa)^{t/2} \|\mathbf{e}_0\| + \sqrt{\frac{\zeta}{\kappa \lambda_{\min}(\mathbf{P})}}
-\end{equation}
+\begin{align}
+\|\mathbf{e}_t\| &\le \sqrt{\frac{V(\mathbf{e}_t)}{\lambda_{\min}(\mathbf{P})}} \nonumber \\
+&\le \sqrt{\frac{\lambda_{\max}(\mathbf{P})}{\lambda_{\min}(\mathbf{P})}} (1 - \kappa)^{t/2} \|\mathbf{e}_0\| + \sqrt{\frac{\zeta}{\kappa \lambda_{\min}(\mathbf{P})}}
+\end{align}
 The transient term decays exponentially at rate $\ln(1 - \kappa)^{-1/2}$, proving the complete absence of thundering-herd limit cycles or divergent oscillatory trajectories.
 \end{proof}
 
@@ -303,9 +311,10 @@ For $D = 10{,}000$ and a standard decision threshold $\theta = 0.45$, the collis
 Let $X_i = u_i \oplus v_i$. Since $u_i, v_i \stackrel{\text{i.i.d.}}{\sim} \text{Bernoulli}(0.5)$, the XOR sum $X_i \stackrel{\text{i.i.d.}}{\sim} \text{Bernoulli}(0.5)$. Thus, the unnormalized Hamming distance $S_D = \sum_{i=1}^D X_i \sim \text{Binomial}(D, 0.5)$. 
 
 The random variables $X_i \in [0, 1]$ are independent and bounded. Applying the Chernoff-Hoeffding inequality~\cite{hoeffding1963probability} to the sum $S_D$ with mean $\mathbb{E}[S_D] = 0.5 D$:
-\begin{equation}
-\mathbb{P}\left(S_D \le \theta D\right) = \mathbb{P}\left(S_D - 0.5 D \le -(0.5 - \theta) D\right) \le \exp\left(- \frac{2 ((0.5 - \theta)D)^2}{D}\right)
-\end{equation}
+\begin{align}
+\mathbb{P}(S_D \le \theta D) &= \mathbb{P}\big(S_D - 0.5 D \le -(0.5 - \theta) D\big) \nonumber \\
+&\le \exp\left(- \frac{2 ((0.5 - \theta)D)^2}{D}\right)
+\end{align}
 Simplifying the exponent yields:
 \begin{equation}
 \mathbb{P}\left(\frac{1}{D} S_D \le \theta\right) \le \exp\left(-2 D (0.5 - \theta)^2\right)
@@ -361,8 +370,10 @@ We evaluated DeepLog-Infinity on the complete canonical HDFS benchmark dataset~\
 \begin{table*}[t]
 \centering
 \small
+\setlength{\tabcolsep}{4pt}
 \caption{Comprehensive Anomaly Detection Benchmark on 570,204 HDFS Test Blocks (11,077,032 Transitions).}
 \label{tab:benchmark_results}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{llccccccc}
 \toprule
 \textbf{Model / Strategy} & \textbf{Parameters} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{FPR (\%)} & \textbf{TP} & \textbf{FP} & \textbf{FN} \\
@@ -378,14 +389,15 @@ Cumulative NLL (Balanced) & $\tau = 0.60$ & 51.00\% & 80.79\% & 62.53\% & 2.361\
 \textbf{Cumulative NLL (SOTA F1)} & $\tau = 0.75$ & \textbf{73.22\%} & \textbf{71.27\%} & \textbf{72.23\%} & \textbf{0.7931\%} & \textbf{12,000} & \textbf{4,389} & \textbf{4,838} \\
 Cumulative NLL (Conservative) & $\tau = 1.00$ & 83.99\% & 51.74\% & 64.03\% & 0.3002\% & 8,712 & 1,661 & 8,126 \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}
 
 \subsection{Detection Accuracy and SOTA Benchmark}
 Table~\ref{tab:benchmark_results} summarizes the detection performance across varying operational configurations. 
 
 \begin{itemize}[leftmargin=*]
-    \item \textbf{State-of-the-Art F1-Score (72.23\%):} By replacing rigid top-$g$ boolean flags with continuous Cumulative Negative Log-Likelihood ($\bar{\ell} = \frac{1}{T} \sum_{t=1}^T -\log \hat{y}_{t, k_t} > \tau$), DeepLog-Infinity sets a new SOTA F1-score of \textbf{72.23\%} at $\tau = 0.75$. This captures \textbf{12,000 true positives}—an absolute gain of $+1,885$ anomalous blocks ($+11.2\%$ recall improvement) over the foundational DeepLog baseline. Normal blocks exhibit an empirical mean NLL of $0.2232 \pm 0.1591$, whereas anomalous blocks exhibit $1.1943 \pm 0.8067$.
+    \item \textbf{State-of-the-Art F1-Score (72.23\%):} By replacing rigid top-$g$ boolean flags with continuous Cumulative Negative Log-Likelihood ($\bar{\ell} = \frac{1}{T} \sum_{t=1}^T -\log \hat{y}_{t, k_t} > \tau$), DeepLog-Infinity sets a new SOTA F1-score of \textbf{72.23\%} at $\tau = 0.75$. This captures \textbf{12,000 true positives}---an absolute gain of $+1,885$ anomalous blocks ($+11.2\%$ recall improvement) over the foundational DeepLog baseline. Normal blocks exhibit an empirical mean NLL of $0.2232 \pm 0.1591$, whereas anomalous blocks exhibit $1.1943 \pm 0.8067$.
     \item \textbf{False Alarm Suppression (-81.2\%):} In on-call SRE environments where alert fatigue is critical, the Consecutive Violations engine ($g=4, c=2$) slashes false positive alarms from 1,683 down to \textbf{317 blocks} (an \textbf{81.2\% reduction}), achieving an unprecedented precision of \textbf{92.90\%}.
     \item \textbf{Forensic Threat-Hunting Mode (99.99\% Recall):} In compliance and audit modes ($\tau = 0.40$), DeepLog-Infinity successfully identifies \textbf{16,836 out of 16,838 anomaly blocks}, missing only 2 blocks across more than half a million sessions.
 \end{itemize}
@@ -393,23 +405,26 @@ Table~\ref{tab:benchmark_results} summarizes the detection performance across va
 \subsection{Sub-Microsecond Serving Latency}
 To evaluate real-time deployment feasibility, we benchmarked the inference execution speed across multiple hardware backends and execution modes. As reported in Table~\ref{tab:latency_benchmarks}:
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
 \caption{Inference Latency and Throughput Benchmarks.}
 \label{tab:latency_benchmarks}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
 \textbf{Engine / Subsystem} & \textbf{Batch} & \textbf{Mean Latency} & \textbf{Throughput} \\
 \midrule
-\textbf{HDC Holographic Core} & 1 & \textbf{0.293 $\mu$s} & \textbf{3,407,503 ops/s} \\
-eBPF In-Kernel Push & 1 & 0.406 $\mu$s & 2,461,665 ev/s \\
-Native Struct Pack/Unpack & 1 & 0.084 $\mu$s & 11,850,301 st/s \\
-TorchScript JIT (CPU) & 1 & 0.196 ms & 5,111 seq/s \\
-TorchScript JIT (CPU) & 32 & 0.672 ms & 47,619 seq/s \\
-TorchScript JIT (MPS) & 1,024 & 3.905 ms & \textbf{262,211 seq/s} \\
+\textbf{HDC Holographic Core} & 1 & \textbf{0.293\,$\mu$s} & \textbf{3,407,503 ops/s} \\
+eBPF In-Kernel Push & 1 & 0.406\,$\mu$s & 2,461,665 ev/s \\
+Native Struct Pack/Unpack & 1 & 0.084\,$\mu$s & 11,850,301 st/s \\
+TorchScript JIT (CPU) & 1 & 0.196\,ms & 5,111 seq/s \\
+TorchScript JIT (CPU) & 32 & 0.672\,ms & 47,619 seq/s \\
+TorchScript JIT (Apple MPS) & 1,024 & 3.905\,ms & \textbf{262,211 seq/s} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 The HDC Holographic Core achieves an average execution latency of \textbf{0.293 $\mu$s} ($0.29\,\mu\text{s}$), sustaining over \textbf{3.4 million operations per second} per CPU core. Numerical equivalence between native PyTorch execution and the compiled TorchScript JIT graph was strictly verified: $\max |y_{\text{native}} - y_{\text{jit}}| < 4.77 \times 10^{-6}$.
@@ -417,24 +432,27 @@ The HDC Holographic Core achieves an average execution latency of \textbf{0.293 
 \subsection{Adversarial Chaos Gym Self-Play}
 In the distributed Chaos Gym environment, an Actor-Critic \texttt{RedChaosAgent} subjected a 16-node cluster to concurrent thread pool starvation, $25\%$ packet loss, and Byzantine slowloris delays over 1,000 multi-step tournament episodes.
 
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcc}
 \toprule
 \textbf{Metric} & \textbf{Without Immune Agent} & \textbf{DeepLog-Infinity} \\
 \midrule
 Mean Blast Radius & 88.4\% of nodes & \textbf{4.0\% of nodes (-95.5\%)} \\
-Cluster P99 Latency & 2,840 ms & \textbf{1,710 ms (-39.8\%)} \\
+Cluster P99 Latency & 2,840\,ms & \textbf{1,710\,ms (-39.8\%)} \\
 SLA Availability & 61.2\% & \textbf{100.0\% (Zero Breach)} \\
 CBF Invariant Breaches & 142 events & \textbf{0 events (Provable)} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \caption{Adversarial Chaos Gym tournament results over 1,000 episodes.}
 \label{fig:chaos_results}
 \end{figure}
 
-As shown in Figure~\ref{fig:chaos_results}, the \texttt{BlueImmuneAgent}, constrained by the QP-CBF safety filter, reduced the mean cluster blast radius from 88.4\% down to \textbf{4.0\%}—a \textbf{95.5\% blast radius reduction}. It simultaneously suppressed P99 tail latency by \textbf{39.8\%} while preserving \textbf{100\% SLA availability} without a single barrier invariant violation.
+As shown in Figure~\ref{fig:chaos_results}, the \texttt{BlueImmuneAgent}, constrained by the QP-CBF safety filter, reduced the mean cluster blast radius from 88.4\% down to \textbf{4.0\%}---a \textbf{95.5\% blast radius reduction}. It simultaneously suppressed P99 tail latency by \textbf{39.8\%} while preserving \textbf{100\% SLA availability} without a single barrier invariant violation.
 
 % ------------------------------------------------------------------------------
 % 6. DISCUSSION

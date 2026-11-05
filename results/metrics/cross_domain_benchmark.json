@@ -1,0 +1,491 @@
+{
+  "timestamp": "2026-11-05T16:45:26.379593+00:00",
+  "source_domain": "HDFS",
+  "target_domains": [
+    "BGL",
+    "Thunderbird",
+    "Kubernetes"
+  ],
+  "embedding_dim": 128,
+  "threshold": 0.5,
+  "top_k": 5,
+  "elapsed_seconds": 0.1072,
+  "dataset_summaries": {
+    "HDFS": {
+      "domain_name": "HDFS",
+      "total_lines": 10,
+      "total_tokens": 149,
+      "unique_tokens": 37,
+      "vocabulary_entropy": 3.8200329328609963,
+      "mean_tokens_per_line": 14.9,
+      "temporal_variance": null,
+      "mean_time_delta": null,
+      "unique_templates_count": 7,
+      "top_tokens": {
+        "<param>": 55,
+        "block": 14,
+        "info": 10,
+        "dfs": 10,
+        "data": 8,
+        "node": 4,
+        "fsnamesystem": 4,
+        "for": 3,
+        "xceiver": 2,
+        "receiving": 2,
+        "src": 2,
+        "dest": 2,
+        "scanner": 2,
+        "verification": 2,
+        "succeeded": 2,
+        "packet": 2,
+        "responder": 2,
+        "name": 2,
+        "system": 2,
+        "to": 2
+      }
+    },
+    "BGL": {
+      "domain_name": "BGL",
+      "total_lines": 8,
+      "total_tokens": 59,
+      "unique_tokens": 45,
+      "vocabulary_entropy": 5.238575252751672,
+      "mean_tokens_per_line": 7.375,
+      "temporal_variance": 0.0,
+      "mean_time_delta": 1.0,
+      "unique_templates_count": 8,
+      "top_tokens": {
+        "<param>": 8,
+        "error": 2,
+        "corrected": 2,
+        "interrupt": 2,
+        "iar": 2,
+        "dear": 2,
+        "0245b000": 2,
+        "alignment": 2,
+        "instruction": 1,
+        "cache": 1,
+        "parity": 1,
+        "microseconds": 1,
+        "common": 1,
+        "tree": 1,
+        "auxiliary": 1,
+        "header": 1,
+        "format": 1,
+        "packets": 1,
+        "floating": 1,
+        "point": 1
+      }
+    },
+    "Thunderbird": {
+      "domain_name": "Thunderbird",
+      "total_lines": 9,
+      "total_tokens": 57,
+      "unique_tokens": 38,
+      "vocabulary_entropy": 4.660736612179944,
+      "mean_tokens_per_line": 6.333333333333333,
+      "temporal_variance": 259.734375,
+      "mean_time_delta": 6.375,
+      "unique_templates_count": 8,
+      "top_tokens": {
+        "<param>": 14,
+        "to": 3,
+        "error": 3,
+        "synchronized": 2,
+        "stratum": 2,
+        "restart": 1,
+        "linux": 1,
+        "version": 1,
+        "elsmp": 1,
+        "bios": 1,
+        "provided": 1,
+        "physical": 1,
+        "ram": 1,
+        "map": 1,
+        "node": 1,
+        "an179": 1,
+        "started": 1,
+        "edac": 1,
+        "mc0": 1,
+        "ce": 1
+      }
+    },
+    "Kubernetes": {
+      "domain_name": "Kubernetes",
+      "total_lines": 10,
+      "total_tokens": 79,
+      "unique_tokens": 51,
+      "vocabulary_entropy": 5.264047007830046,
+      "mean_tokens_per_line": 7.9,
+      "temporal_variance": null,
+      "mean_time_delta": null,
+      "unique_templates_count": 10,
+      "top_tokens": {
+        "<param>": 12,
+        "to": 5,
+        "failed": 3,
+        "cluster": 3,
+        "client": 2,
+        "v1": 2,
+        "pod": 2,
+        "a": 2,
+        "kubernetes": 2,
+        "default": 2,
+        "svc": 2,
+        "local": 2,
+        "etcd": 2,
+        "response": 1,
+        "ok": 1,
+        "get": 1,
+        "authentication": 1,
+        "successful": 1,
+        "ready": 1,
+        "serve": 1
+      }
+    }
+  },
+  "lexical_comparisons": {
+    "BGL": {
+      "source_domain": "HDFS",
+      "target_domain": "BGL",
+      "source_vocab_size": 37,
+      "target_vocab_size": 45,
+      "shared_tokens_count": 2,
+      "jaccard_similarity": 0.025,
+      "oov_rate_weighted": 0.847457627118644,
+      "oov_rate_unique": 0.9555555555555556,
+      "source_entropy": 3.8200329328609963,
+      "target_entropy": 5.238575252751672,
+      "entropy_diff": 1.4185423198906757
+    },
+    "Thunderbird": {
+      "source_domain": "HDFS",
+      "target_domain": "Thunderbird",
+      "source_vocab_size": 37,
+      "target_vocab_size": 38,
+      "shared_tokens_count": 4,
+      "jaccard_similarity": 0.056338028169014086,
+      "oov_rate_weighted": 0.6666666666666666,
+      "oov_rate_unique": 0.8947368421052632,
+      "source_entropy": 3.8200329328609963,
+      "target_entropy": 4.660736612179944,
+      "entropy_diff": 0.8407036793189477
+    },
+    "Kubernetes": {
+      "source_domain": "HDFS",
+      "target_domain": "Kubernetes",
+      "source_vocab_size": 37,
+      "target_vocab_size": 51,
+      "shared_tokens_count": 2,
+      "jaccard_similarity": 0.023255813953488372,
+      "oov_rate_weighted": 0.7848101265822784,
+      "oov_rate_unique": 0.9607843137254902,
+      "source_entropy": 3.8200329328609963,
+      "target_entropy": 5.264047007830046,
+      "entropy_diff": 1.4440140749690493
+    }
+  },
+  "transfer_evaluations": {
+    "BGL": {
+      "source_domain": "HDFS",
+      "target_domain": "BGL",
+      "source_templates_count": 7,
+      "target_templates_count": 8,
+      "mean_cosine_similarity": 0.25551252951845527,
+      "std_cosine_similarity": 0.2348047144865858,
+      "min_cosine_similarity": -0.028512194752693176,
+      "max_cosine_similarity": 0.6220555901527405,
+      "semantic_coverage_50": 0.25,
+      "semantic_coverage_70": 0.0,
+      "discrete_oov_rate": 1.0,
+      "semantic_oov_rate_50": 0.75,
+      "template_matches": [
+        {
+          "target_id": "BGL_1",
+          "target_text": "instruction cache parity error corrected",
+          "matched_source_id": "E2",
+          "matched_source_text": "Verification succeeded for <*>",
+          "cosine_similarity": 0.036649588495492935,
+          "is_covered": false
+        },
+        {
+          "target_id": "BGL_2",
+          "target_text": "microseconds common interrupt: iar <*> dear <*>",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.6220555901527405,
+          "is_covered": true
+        },
+        {
+          "target_id": "BGL_3",
+          "target_text": "tree auxiliary header format <*>, <*> packets",
+          "matched_source_id": "E3",
+          "matched_source_text": "Received block <*> of size <*> from <*>",
+          "cosine_similarity": 0.5316712856292725,
+          "is_covered": true
+        },
+        {
+          "target_id": "BGL_4",
+          "target_text": "<*> floating point alignment exceptions",
+          "matched_source_id": "E4",
+          "matched_source_text": "PacketResponder <*> for block <*> terminating",
+          "cosine_similarity": 0.2617901563644409,
+          "is_covered": false
+        },
+        {
+          "target_id": "BGL_5",
+          "target_text": "double hummer alignment exception",
+          "matched_source_id": "E2",
+          "matched_source_text": "Verification succeeded for <*>",
+          "cosine_similarity": -0.028512194752693176,
+          "is_covered": false
+        },
+        {
+          "target_id": "BGL_6",
+          "target_text": "ddr error(s) detected and corrected on rank <*>, symbol <*>",
+          "matched_source_id": "E3",
+          "matched_source_text": "Received block <*> of size <*> from <*>",
+          "cosine_similarity": 0.4574686586856842,
+          "is_covered": false
+        },
+        {
+          "target_id": "BGL_7",
+          "target_text": "link card not responding to ping",
+          "matched_source_id": "E4",
+          "matched_source_text": "PacketResponder <*> for block <*> terminating",
+          "cosine_similarity": 0.09703153371810913,
+          "is_covered": false
+        },
+        {
+          "target_id": "BGL_8",
+          "target_text": "panic: critical interrupt trap handler failure",
+          "matched_source_id": "E7",
+          "matched_source_text": "Deleting block <*> file <*>",
+          "cosine_similarity": 0.06594561785459518,
+          "is_covered": false
+        }
+      ],
+      "sequence_result": {
+        "total_sequences": 3,
+        "top_1_hits": 1,
+        "top_3_hits": 1,
+        "top_5_hits": 1,
+        "top_1_accuracy": 0.3333333333333333,
+        "top_3_accuracy": 0.3333333333333333,
+        "top_5_accuracy": 0.3333333333333333,
+        "mean_cosine_similarity": 0.009984406332174936,
+        "anomaly_count": 3,
+        "anomaly_rate": 1.0,
+        "roc_auc": null,
+        "f1_score": null
+      },
+      "lexical_comparison": null
+    },
+    "Thunderbird": {
+      "source_domain": "HDFS",
+      "target_domain": "Thunderbird",
+      "source_templates_count": 7,
+      "target_templates_count": 8,
+      "mean_cosine_similarity": 0.3785447049885988,
+      "std_cosine_similarity": 0.22517707138911203,
+      "min_cosine_similarity": 0.06876538693904877,
+      "max_cosine_similarity": 0.5908036231994629,
+      "semantic_coverage_50": 0.625,
+      "semantic_coverage_70": 0.0,
+      "discrete_oov_rate": 1.0,
+      "semantic_oov_rate_50": 0.375,
+      "template_matches": [
+        {
+          "target_id": "TB_1",
+          "target_text": "syslogd.<*>: restart.",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.539690375328064,
+          "is_covered": true
+        },
+        {
+          "target_id": "TB_2",
+          "target_text": "Linux version <*> ELsmp",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.5316182374954224,
+          "is_covered": true
+        },
+        {
+          "target_id": "TB_3",
+          "target_text": "BIOS-provided physical RAM map:",
+          "matched_source_id": "E2",
+          "matched_source_text": "Verification succeeded for <*>",
+          "cosine_similarity": 0.0828709527850151,
+          "is_covered": false
+        },
+        {
+          "target_id": "TB_4",
+          "target_text": "node <*> started",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.5118387937545776,
+          "is_covered": true
+        },
+        {
+          "target_id": "TB_5",
+          "target_text": "synchronized to <*>, stratum <*>",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.5908036231994629,
+          "is_covered": true
+        },
+        {
+          "target_id": "TB_6",
+          "target_text": "EDAC MC0: CE row <*>, channel <*>, label: ECC error",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.5843611359596252,
+          "is_covered": true
+        },
+        {
+          "target_id": "TB_7",
+          "target_text": "LustreError: an error occurred during read",
+          "matched_source_id": "E5",
+          "matched_source_text": "BLOCK* NameSystem.addStoredBlock: blockMap updated: <*> is added to <*>",
+          "cosine_similarity": 0.11840913444757462,
+          "is_covered": false
+        },
+        {
+          "target_id": "TB_8",
+          "target_text": "Unable to handle kernel paging request",
+          "matched_source_id": "E5",
+          "matched_source_text": "BLOCK* NameSystem.addStoredBlock: blockMap updated: <*> is added to <*>",
+          "cosine_similarity": 0.06876538693904877,
+          "is_covered": false
+        }
+      ],
+      "sequence_result": {
+        "total_sequences": 3,
+        "top_1_hits": 1,
+        "top_3_hits": 2,
+        "top_5_hits": 2,
+        "top_1_accuracy": 0.3333333333333333,
+        "top_3_accuracy": 0.6666666666666666,
+        "top_5_accuracy": 0.6666666666666666,
+        "mean_cosine_similarity": 0.03242842651282748,
+        "anomaly_count": 3,
+        "anomaly_rate": 1.0,
+        "roc_auc": null,
+        "f1_score": null
+      },
+      "lexical_comparison": null
+    },
+    "Kubernetes": {
+      "source_domain": "HDFS",
+      "target_domain": "Kubernetes",
+      "source_templates_count": 7,
+      "target_templates_count": 10,
+      "mean_cosine_similarity": 0.3005515355616808,
+      "std_cosine_similarity": 0.23058918966965317,
+      "min_cosine_similarity": 0.023144137114286423,
+      "max_cosine_similarity": 0.6350518465042114,
+      "semantic_coverage_50": 0.3,
+      "semantic_coverage_70": 0.0,
+      "discrete_oov_rate": 1.0,
+      "semantic_oov_rate_50": 0.7,
+      "template_matches": [
+        {
+          "target_id": "K8S_1",
+          "target_text": "Response: 200 OK GET <*> pods",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.6350518465042114,
+          "is_covered": true
+        },
+        {
+          "target_id": "K8S_2",
+          "target_text": "Authentication successful user=<*>",
+          "matched_source_id": "E2",
+          "matched_source_text": "Verification succeeded for <*>",
+          "cosine_similarity": 0.5400094985961914,
+          "is_covered": true
+        },
+        {
+          "target_id": "K8S_3",
+          "target_text": "ready to serve client requests",
+          "matched_source_id": "E5",
+          "matched_source_text": "BLOCK* NameSystem.addStoredBlock: blockMap updated: <*> is added to <*>",
+          "cosine_similarity": 0.10423643887042999,
+          "is_covered": false
+        },
+        {
+          "target_id": "K8S_4",
+          "target_text": "apply request took too long took=<*>",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.3205520510673523,
+          "is_covered": false
+        },
+        {
+          "target_id": "K8S_5",
+          "target_text": "Failed to start container pod=<*> err=<*>",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.6225423812866211,
+          "is_covered": true
+        },
+        {
+          "target_id": "K8S_6",
+          "target_text": "Failed to watch *v1.Pod: connection refused",
+          "matched_source_id": "E2",
+          "matched_source_text": "Verification succeeded for <*>",
+          "cosine_similarity": 0.08177629113197327,
+          "is_covered": false
+        },
+        {
+          "target_id": "K8S_7",
+          "target_text": "A IN kubernetes.default.svc.cluster.local NOERROR",
+          "matched_source_id": "E5",
+          "matched_source_text": "BLOCK* NameSystem.addStoredBlock: blockMap updated: <*> is added to <*>",
+          "cosine_similarity": 0.05821191519498825,
+          "is_covered": false
+        },
+        {
+          "target_id": "K8S_8",
+          "target_text": "plugin/errors: unreachable backend",
+          "matched_source_id": "E1",
+          "matched_source_text": "Receiving block <*> src: <*> dest: <*>",
+          "cosine_similarity": 0.4444221258163452,
+          "is_covered": false
+        },
+        {
+          "target_id": "K8S_9",
+          "target_text": "etcd cluster unavailable error=<*>",
+          "matched_source_id": "E6",
+          "matched_source_text": "BLOCK* NameSystem.allocateBlock: <*> blk_<*>",
+          "cosine_similarity": 0.17556867003440857,
+          "is_covered": false
+        },
+        {
+          "target_id": "K8S_10",
+          "target_text": "panic: unable to create etcd client",
+          "matched_source_id": "E6",
+          "matched_source_text": "BLOCK* NameSystem.allocateBlock: <*> blk_<*>",
+          "cosine_similarity": 0.023144137114286423,
+          "is_covered": false
+        }
+      ],
+      "sequence_result": {
+        "total_sequences": 3,
+        "top_1_hits": 0,
+        "top_3_hits": 0,
+        "top_5_hits": 1,
+        "top_1_accuracy": 0.0,
+        "top_3_accuracy": 0.0,
+        "top_5_accuracy": 0.3333333333333333,
+        "mean_cosine_similarity": 0.07720267151792844,
+        "anomaly_count": 3,
+        "anomaly_rate": 1.0,
+        "roc_auc": null,
+        "f1_score": null
+      },
+      "lexical_comparison": null
+    }
+  }
+}

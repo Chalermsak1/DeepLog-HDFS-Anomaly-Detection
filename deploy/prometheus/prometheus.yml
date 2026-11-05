@@ -1,0 +1,18 @@
+# Prometheus configuration for DeepLog Mission Control & Observability
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+scrape_configs:
+  - job_name: "deeplog-cockpit"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["deeplog-cockpit:8000"]
+        labels:
+          app: "deeplog-infinity"
+          tier: "cockpit"
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

@@ -1,0 +1,115 @@
+\begin{thebibliography}{10}
+
+\bibitem{ames2019control}
+Aaron~D. Ames, Samuel Coogan, Magnus Egerstedt, Gennaro Notomista, Koushil
+  Sreenath, and Paulo Tabuada.
+\newblock {Control Barrier Functions: Theory and Applications}.
+\newblock {\em Proceedings of the 18th European Control Conference (ECC)},
+  pages 3420--3431, 2019.
+
+\bibitem{barham2003xen}
+Paul Barham, Boris Dragovic, Keir Fraser, Steven Hand, Tim Harris, Alex Ho,
+  Rolf Neugebauer, Ian Pratt, and Andrew Warfield.
+\newblock {Xen and the Art of Virtualization}.
+\newblock In {\em Proceedings of the 19th ACM Symposium on Operating Systems
+  Principles (SOSP)}, pages 164--177, 2003.
+
+\bibitem{bernstein2012high}
+Daniel~J. Bernstein, Niels Duif, Tanja Lange, Peter Schwabe, and Bo-Yin Yang.
+\newblock {High-speed high-security signatures}.
+\newblock {\em Journal of Cryptographic Engineering}, 2(2):77--89, 2012.
+
+\bibitem{curtsinger2013coz}
+Charlie Curtsinger and Emery~D. Berger.
+\newblock {Coz: Finding Code that Counts with Causal Profiling}.
+\newblock In {\em Proceedings of the 25th ACM Symposium on Operating Systems
+  Principles (SOSP)}, pages 184--197, 2015.
+
+\bibitem{du2017deeplog}
+Min Du, Feifei Li, Guineng Zheng, and Vivek Srikumar.
+\newblock {DeepLog: Anomaly Detection and Diagnosis from System Logs through
+  Deep Learning}.
+\newblock In {\em Proceedings of the 2017 ACM SIGSAC Conference on Computer and
+  Communications Security (CCS)}, pages 1285--1298. ACM, 2017.
+
+\bibitem{dwork2014algorithmic}
+Cynthia Dwork and Aaron Roth.
+\newblock {The Algorithmic Foundations of Differential Privacy}.
+\newblock {\em Foundations and Trends in Theoretical Computer Science},
+  9(3--4):211--407, 2014.
+
+\bibitem{hafner2020dreamer}
+Danijar Hafner, Timothy Lillicrap, Jimmy Ba, and Mohammad Norouzi.
+\newblock {Dream to Control: Learning Behaviors by Latent Imagination}.
+\newblock In {\em Proceedings of the 8th International Conference on Learning
+  Representations (ICLR)}, 2020.
+
+\bibitem{he2017drain}
+Pinjia He, Jieming Zhu, Zibin Zheng, and Michael~R. Lyu.
+\newblock {Drain: An Online Log Parsing Approach with Fixed Depth Tree}.
+\newblock In {\em Proceedings of the 2017 IEEE International Conference on Web
+  Services (ICWS)}, pages 33--40. IEEE, 2017.
+
+\bibitem{hoeffding1963probability}
+Wassily Hoeffding.
+\newblock {Probability Inequalities for Sums of Bounded Random Variables}.
+\newblock {\em Journal of the American Statistical Association},
+  58(301):13--30, 1963.
+
+\bibitem{jackson1957networks}
+James~R. Jackson.
+\newblock {Networks of Waiting Lines}.
+\newblock {\em Operations Research}, 5(4):518--521, 1957.
+
+\bibitem{kanerva2009hyperdimensional}
+Pentti Kanerva.
+\newblock {Hyperdimensional Computing: An Introduction to Computing in
+  Distributed Representation with High-Dimensional Random Vectors}.
+\newblock {\em Cognitive Computation}, 1(2):139--159, 2009.
+
+\bibitem{little1961proof}
+John D.~C. Little.
+\newblock {A Proof for the Queuing Formula: $L = \lambda W$}.
+\newblock {\em Operations Research}, 9(3):383--387, 1961.
+
+\bibitem{lyapunov1992general}
+Aleksandr~M. Lyapunov.
+\newblock {\em {The General Problem of the Stability of Motion}}.
+\newblock Taylor \& Francis, 1992.
+\newblock Translated by A. T. Fuller.
+
+\bibitem{meng2019loganomaly}
+Weibo Meng, Ying Liu, Yichen Zhu, Shenglin Zhang, Dan Pei, Yu~Chen, Yuping
+  Chen, Ruizhi Wang, and Hao Dong.
+\newblock {LogAnomaly: Unsupervised Detection of Sequential and Quantitative
+  Anomalies in Unstructured Logs}.
+\newblock In {\em Proceedings of the 28th International Joint Conference on
+  Artificial Intelligence (IJCAI)}, pages 4739--4745, 2019.
+
+\bibitem{nagumo1942lage}
+Mitio Nagumo.
+\newblock {{\"U}ber die Lage der Integralkurven gew{\"o}hnlicher
+  Differentialgleichungen}.
+\newblock {\em Proceedings of the Physico-Mathematical Society of Japan},
+  24:551--559, 1942.
+
+\bibitem{schnorr1991efficient}
+Claus-Peter Schnorr.
+\newblock {Efficient Signature Generation by Smart Cards}.
+\newblock {\em Journal of Cryptology}, 4(3):161--174, 1991.
+
+\bibitem{shvachko2010hadoop}
+Konstantin Shvachko, Hairong Kuang, Sanjay Radia, and Robert Chansler.
+\newblock {The Hadoop Distributed File System}.
+\newblock In {\em Proceedings of the 2010 IEEE 26th Symposium on Mass Storage
+  Systems and Technologies (MSST)}, pages 1--10. IEEE, 2010.
+
+\bibitem{zhang2019logrobust}
+Xu~Zhang, Qingwei Lin, Yong Xu, Saravan Rajmohan, Dongmei Zhang, Yingnong Dang,
+  Jian-Guang Lou, Shi Han, and Hailayan Zhang.
+\newblock {Robust log-based anomaly detection on unstable log data}.
+\newblock In {\em Proceedings of the 27th ACM Joint Meeting on European
+  Software Engineering Conference and Symposium on the Foundations of Software
+  Engineering (ESEC/FSE)}, pages 807--817, 2019.
+
+\end{thebibliography}

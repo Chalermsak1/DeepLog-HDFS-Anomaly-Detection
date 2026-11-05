@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.13%2B-orange.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-532%20Passed-success.svg)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-662%20Passed-success.svg)](tests/)
 [![F1-Score SOTA](https://img.shields.io/badge/SOTA%20F1-72.23%25-brightgreen.svg)](#official-experimental-results)
 [![Inference Latency](https://img.shields.io/badge/HDC%20Latency-0.29%20%CE%BCs-purple.svg)](#pillar-i-zero-io-in-kernel-ebpf--hyperdimensional-computing-hdc)
 [![Formal Verification](https://img.shields.io/badge/Safety-CBF%20%26%20Lyapunov%20Verified-blueviolet.svg)](#frontier-4-provable-safety--formal-verification-cbf--lyapunov-stability)
@@ -42,6 +42,11 @@ An enterprise-grade, empirical implementation and architectural evolution of **D
    - **Grand Showcase Demonstrator (`scripts/demo_infinity_showcase.py`)**: End-to-end interactive CLI demonstration across all 7 deep pillars with colorized output and JSON artifact export.
    - **Conversational AI SRE Copilot (`src/deeplog/copilot.py`)**: Multi-turn intelligent incident response, formal CBF invariant proof explanation, AST causality tracing, and automated Git patch generation.
    - **Cloud-Native Kubernetes Operator & Helm (`deploy/k8s/`, `src/deeplog/k8s_manager.py`)**: `DeepLogCluster` & `DeepLogPolicy` CRDs, privileged eBPF DaemonSet with hostPID/hostNetwork, and pure-Python zero-dependency Helm templating engine.
+7. **DeepLog Enterprise Horizons & Academic Frontiers**:
+   - **Autonomous GitOps & SLM Dataset Pipeline (`src/deeplog/gitops.py`, `scripts/generate_slm_dataset.py`)**: Automated branch creation, unified diff patching, AST validation, HMAC-SHA256 webhook dispatcher, ArgoCD health assessment with automated CBF rollback, and instruction-tuning dataset curation (Alpaca/ShareGPT/HuggingFace) for local SLM fine-tuning.
+   - **Cross-Domain Benchmarking Engine (`src/deeplog/cross_domain.py`, `scripts/benchmark_cross_domain.py`)**: Multi-format log parsers for BGL (Blue Gene/L), Thunderbird (HPC), and Kubernetes Control Plane (`kube-apiserver`, `etcd`, `kubelet`, `coredns`). Continuous hypersphere CRC32 subword semantic zero-shot transfer without retraining.
+   - **Production Infra & eBPF CO-RE Toolchain (`src/deeplog/bpf_core_builder.py`, `src/deeplog/streaming_connectors.py`, `src/deeplog/onnx_exporter.py`)**: Linux BPF CO-RE lifecycle, BTF probing, and `vmlinux.h` probe. Asynchronous multi-partition Kafka producers/consumers, sliding window buffer with configurable backpressure (`reject`, `drop_oldest`, `block`), columnar ClickHouse sink, and dynamic-axes PyTorch ONNX export with strict numerical parity (`atol <= 1e-4`).
+   - **Academic USENIX Research Paper & Turnkey Docker Stack (`paper/`, `Dockerfile`, `docker-compose.yml`)**: 9-page publication-grade LaTeX research paper (`paper/deeplog_infinity_usenix.pdf`) following USENIX Security / ATC conventions with 4 mathematical proofs (CBF QP forward invariance, Discrete Lyapunov contraction, HDC 10,000-bit Hamming collision bounds, Little's Law conservation). Multi-stage security-hardened Dockerfile and one-command Docker Compose stack (Cockpit + Kafka + ClickHouse + Prometheus).
 
 ---
 
@@ -54,6 +59,7 @@ An enterprise-grade, empirical implementation and architectural evolution of **D
 - [DeepLog-Omni: Autonomous Neuro-Immune Frontiers](#deeplog-omni-autonomous-neuro-immune-frontiers)
 - [DeepLog-Infinity: 5 Cutting-Edge Frontiers](#deeplog-infinity-5-cutting-edge-frontiers)
 - [DeepLog Mission Control Platform & Kubernetes Deployment](#deeplog-mission-control-platform--kubernetes-deployment)
+- [DeepLog Enterprise Horizons & Academic Research Paper](#deeplog-enterprise-horizons--academic-research-paper)
 - [Project Structure](#project-structure)
 - [Quickstart & Reproducibility Guide](#quickstart--reproducibility-guide)
 - [Interactive Streamlit Dashboard](#interactive-streamlit-dashboard)
@@ -225,6 +231,60 @@ A reactive 6-tab Streamlit mission control cockpit providing real-time visibilit
 
 ---
 
+## DeepLog Enterprise Horizons & Academic Research Paper
+
+### 1. Autonomous GitOps & GitHub/GitLab PR Auto-Remediation (`src/deeplog/gitops.py`)
+- **Automated Branch & Patch Pipeline**: `GitOpsManager` automatically isolates incidents on dedicated Git branches (`remediation/incident-*`), parses synthesized unified `.patch` hunks, validates syntax using Python/Java AST trees, and executes reverse rollbacks on failure.
+- **Rich PR Descriptor (`GitPRSpec`)**: Generates production-ready Pull Requests containing:
+  - Sequence diagrams (`sequenceDiagram`) visualizing detection &rarr; AST root cause &rarr; CBF safety proof &rarr; GitOps deployment.
+  - AST blame provenance linking failure events to committer history and codeowners.
+  - Formal CBF certificates with Lyapunov stability contraction ratios.
+- **Webhook & ArgoCD Integration (`GitHubWebhookEmulator`, `ArgoCDSyncEngine`)**:
+  - HMAC-SHA256 authenticated webhook delivery (`X-Hub-Signature-256`).
+  - Automated GitOps synchronization with live health assessment (error rate > 5%, crash loops).
+  - Pre-emptive automated rollback triggered when Control Barrier Function margins are breached ($h(\mathbf{x}) < 0$).
+- **SLM Instruction-Tuning Dataset Generator (`SLMDatasetCurator`, `scripts/generate_slm_dataset.py`)**:
+  - Curates multi-turn self-healing tuples `(system_prompt, incident_telemetry, ast_cause, formal_safety_proof, git_patch)` across 5 failure archetypes (`TIMEOUT_EXHAUSTION`, `RESOURCE_LEAK`, `DEADLOCK_CONCURRENCY`, `MIRROR_FAILOVER`, `BUFFER_OVERFLOW`).
+  - Supports Stanford Alpaca, ShareGPT, HuggingFace ChatML, and DeepLog Raw JSONL formats with train/val/test splits for local SLM fine-tuning (e.g. Qwen-2.5-Coder, Llama-3.2).
+
+### 2. Multi-Domain Benchmarking Engine (`src/deeplog/cross_domain.py`)
+- **Heterogeneous Domain Parsers**:
+  - `BGLParser`: Parses Blue Gene/L supercomputer failure logs with multi-line register dumps and stack traces (`iar`, `dear`, `msr`).
+  - `ThunderbirdParser`: Parses HPC Thunderbird syslog streams, computing inter-arrival time deltas ($\Delta t_i$), burst ratios ($\le 0.5\text{s}$), and Fano factor temporal variance.
+  - `KubernetesLogParser`: Multi-format parsing for Klog, structured JSON, and CoreDNS logs across `kube-apiserver`, `etcd`, `kubelet`, and `coredns`, aggregating multi-line Go goroutine panics.
+- **Information Entropy & Lexical Divergence (`DomainDatasetSummary`)**:
+  - Computes Shannon vocabulary entropy $H = -\sum p_i \log_2(p_i)$ and frequency-weighted OOV rates.
+- **Zero-Shot Domain Transfer Evaluator (`DomainTransferEvaluator`)**:
+  - Leverages continuous CRC32 subword hypersphere projections ($S^{d-1}, \|z\|_2 = 1$).
+  - Proves that while discrete DeepLog models suffer **100% hard OOV collapse** on new systems, `SemanticDeepLog` achieves non-zero cosine alignment and zero-shot next-event ranking without retraining.
+
+### 3. Production Infrastructure & eBPF CO-RE Toolchain (`src/deeplog/bpf_core_builder.py`, `src/deeplog/streaming_connectors.py`, `src/deeplog/onnx_exporter.py`)
+- **Linux eBPF CO-RE Builder (`BPFCOREBuilder`)**:
+  - Inspects kernel BTF at `/sys/kernel/btf/vmlinux` (magic `0xEB9F`), dumps C-formatted `vmlinux.h`, and generates skeleton header stubs matching `bpftool gen skeleton` conventions with cross-platform fallbacks.
+- **High-Performance Streaming Connectors (`streaming_connectors.py`)**:
+  - `KafkaLogProducer` & `KafkaLogConsumer`: Asynchronous multi-partition routing with offset tracking, manual/auto commits, and in-memory broker simulation.
+  - `BatchStreamBuffer`: Sliding window queue with backpressure policies (`reject`, `drop_oldest`, `block` with timeouts).
+  - `ClickHouseSink`: Vectorized columnar log ingestion (`np.ndarray` float32/int64) with `YYYYMM` partitioning, MergeTree DDL generation, and exponential retry backoff.
+- **ONNX Model Exporter (`onnx_exporter.py`)**:
+  - Exports PyTorch stacked LSTM `DeepLog` and `DeepLogDualHead` to ONNX graph format (opset 14).
+  - Dynamic axes support for arbitrary `(batch_size, seq_len)` and verified numerical parity ($\max |y_{\text{pytorch}} - y_{\text{onnx}}| \le 10^{-4}$).
+
+### 4. Turnkey Docker Stack & Academic USENIX Research Paper (`Dockerfile`, `docker-compose.yml`, `paper/`)
+- **Production-Grade Multi-Stage Dockerfile**:
+  - Python 3.11-slim builder with layer caching, security-hardened non-root user (`deeplog:deeplog`, UID 10001), healthcheck probes, and purged package caches.
+- **Single-Command Docker Compose (`docker-compose.yml`)**:
+  - Turnkey orchestration of `deeplog-cockpit` (port 8501/8000), `kafka` (KRaft mode, port 9092), `clickhouse` (port 8123/9000), and `prometheus` (port 9090) over isolated bridge network `deeplog-net`.
+- **Publication-Ready Academic Paper (`paper/deeplog_infinity_usenix.tex`, `paper/deeplog_infinity_usenix.pdf`)**:
+  - 9-page research paper formatted according to USENIX Security / ATC / ACM CCS conventions.
+  - Complete with 4 formal mathematical proofs:
+    1. *Theorem 1 (Forward Invariance and Provable Safety via QP-CBF)*
+    2. *Theorem 2 (Discrete Lyapunov Stability and Non-Oscillatory Contraction)*
+    3. *Theorem 3 (HDC 10,000-bit Hypervector Hamming Distance Bounds)*
+    4. *Theorem 4 (Jackson Queue Network Equilibrium and Little's Law Conservation)*
+  - Empirical evaluation over 570,204 HDFS blocks, 0.29 µs HDC latency, 95.5% blast radius reduction, and complete BibTeX references (`paper/references.bib`).
+
+---
+
 ## Project Structure
 
 ```
@@ -233,26 +293,27 @@ DeepLog/
 ├── LICENSE                            # MIT License
 ├── requirements.txt                   # Pinned project dependencies
 ├── setup.py                           # Local editable package setup
+├── Dockerfile                         # Production multi-stage Dockerfile
+├── docker-compose.yml                 # Turnkey cluster (Cockpit + Kafka + ClickHouse + Prometheus)
 ├── app.py                             # Mission Control Cockpit (Streamlit 6-tab dashboard)
 │
-├── deploy/                            # Cloud-Native Kubernetes & Helm Artifacts
-│   └── k8s/
-│       ├── crd/
-│       │   └── deeplog_crd.yaml       # DeepLogCluster & DeepLogPolicy CRDs
-│       ├── daemonset/
-│       │   └── deeplog_ebpf_daemonset.yaml # Privileged eBPF node probe
-│       └── helm/                      # Production Helm v2/v3 chart
-│           ├── Chart.yaml
-│           ├── values.yaml
-│           └── templates/
-│               ├── serviceaccount.yaml
-│               ├── rbac.yaml
-│               ├── configmap.yaml
-│               ├── daemonset.yaml
-│               ├── deployment.yaml
-│               ├── service.yaml
-│               ├── hpa.yaml
-│               └── deeplog-cluster.yaml
+├── paper/                             # USENIX Security / ATC Academic Publication
+│   ├── deeplog_infinity_usenix.tex    # Full 9-page LaTeX manuscript with formal proofs
+│   ├── deeplog_infinity_usenix.pdf    # Compiled publication-grade PDF
+│   └── references.bib                 # Comprehensive BibTeX bibliography
+│
+├── deploy/                            # Cloud-Native Kubernetes & Prometheus Artifacts
+│   ├── k8s/
+│   │   ├── crd/
+│   │   │   └── deeplog_crd.yaml       # DeepLogCluster & DeepLogPolicy CRDs
+│   │   ├── daemonset/
+│   │   │   └── deeplog_ebpf_daemonset.yaml # Privileged eBPF node probe
+│   │   └── helm/                      # Production Helm v2/v3 chart
+│   │       ├── Chart.yaml
+│   │       ├── values.yaml
+│   │       └── templates/
+│   └── prometheus/
+│       └── prometheus.yml             # Prometheus scraping configuration
 │
 ├── src/deeplog/                       # Core DeepLog, Omni & Infinity Package
 │   ├── __init__.py                    # Public package API exports
@@ -282,10 +343,17 @@ DeepLog/
 │   ├── formal_safety.py               # Control Barrier Functions (CBF) & Lyapunov Safety
 │   ├── federated_mesh.py              # Zero-Knowledge Federated Threat Sharing Mesh
 │   ├── copilot.py                     # Conversational AI SRE Copilot & CBF explainer
-│   └── k8s_manager.py                 # Pure-Python K8s CRD & Helm orchestrator
+│   ├── k8s_manager.py                 # Pure-Python K8s CRD & Helm orchestrator
+│   ├── gitops.py                      # GitOpsManager, PR Spec, Webhooks & ArgoCD Sync
+│   ├── cross_domain.py                # BGL, Thunderbird, K8s parsers & zero-shot transfer
+│   ├── bpf_core_builder.py            # Linux eBPF CO-RE builder & BTF probe
+│   ├── streaming_connectors.py        # Asynchronous Kafka & ClickHouse streaming sinks
+│   └── onnx_exporter.py               # Dynamic-axes ONNX graph export & parity verifier
 │
 ├── scripts/                           # Production benchmarks & simulation scripts
 │   ├── demo_infinity_showcase.py      # Grand Showcase Demonstrator (7 core pillars)
+│   ├── generate_slm_dataset.py        # SLM fine-tuning dataset generator (Alpaca/ShareGPT)
+│   ├── benchmark_cross_domain.py      # Multi-domain benchmark (HDFS vs BGL vs T-bird vs K8s)
 │   ├── train.py                       # LSTM training script
 │   ├── evaluate.py                    # Baseline benchmark evaluator
 │   ├── evaluate_advanced_scoring.py   # 570,204 blocks advanced scoring benchmark
@@ -293,7 +361,7 @@ DeepLog/
 │   ├── streaming_simulator.py         # Multi-node live log ingestion simulator
 │   └── predict.py                     # CLI sequence anomaly diagnoser
 │
-├── tests/                             # 532 Automated Unit Tests (100% Pass Rate)
+├── tests/                             # 662 Automated Unit Tests (100% Pass Rate)
 │   ├── test_mapping.py                # Vocabulary consistency tests
 │   ├── test_preprocessor.py           # Slicing and padding tests
 │   ├── test_model.py                  # PyTorch model forward pass tests
@@ -319,7 +387,11 @@ DeepLog/
 │   ├── test_demo_showcase.py          # Grand Showcase Demonstrator CLI tests (27 tests)
 │   ├── test_ui_app.py                 # Mission Control Cockpit UI tests (15 tests)
 │   ├── test_copilot.py                # AI SRE Copilot & dialogue tests (33 tests)
-│   └── test_k8s_deploy.py             # Kubernetes CRD & Helm manager tests (27 tests)
+│   ├── test_k8s_deploy.py             # Kubernetes CRD & Helm manager tests (27 tests)
+│   ├── test_gitops.py                 # GitOps, PR synthesis & SLM dataset tests (29 tests)
+│   ├── test_cross_domain.py           # Cross-domain parsers & transfer tests (33 tests)
+│   ├── test_streaming_connectors.py   # eBPF CO-RE, Kafka, ClickHouse & ONNX tests (37 tests)
+│   └── test_docker_paper.py           # Docker, Compose & USENIX LaTeX tests (31 tests)
 │
 ├── dataset/HDFS_v1/                   # 29 HDFS templates & preprocessed traces
 └── results/                           # Publication figures and exported metrics
@@ -341,12 +413,18 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-### 2. Run Complete Unit Test Suite (532 Tests, 100% Pass Rate)
+### 2. Run Complete Unit Test Suite (662 Tests, 100% Pass Rate)
 ```bash
 pytest tests/ -v
 ```
 
-### 3. Run Grand Showcase Master Demonstrator (All 7 Deep Pillars)
+### 3. Run Turnkey Multi-Service Cluster (Docker Compose)
+```bash
+# Spins up DeepLog Cockpit (8501), Kafka (9092), ClickHouse (8123), and Prometheus (9090)
+docker compose up -d
+```
+
+### 4. Run Grand Showcase Master Demonstrator (All 7 Deep Pillars)
 ```bash
 # Interactive ANSI terminal mode
 python scripts/demo_infinity_showcase.py
@@ -355,17 +433,27 @@ python scripts/demo_infinity_showcase.py
 python scripts/demo_infinity_showcase.py --headless --export-json results/showcase_report.json
 ```
 
-### 4. Run Advanced Scoring Benchmark (570,204 Evaluation Blocks)
+### 5. Run Cross-Domain Benchmark (HDFS vs BGL vs Thunderbird vs Kubernetes)
+```bash
+python scripts/benchmark_cross_domain.py --source HDFS --targets BGL Thunderbird Kubernetes
+```
+
+### 6. Generate SLM Instruction-Tuning Dataset (Alpaca / ShareGPT)
+```bash
+python scripts/generate_slm_dataset.py --format alpaca --num-samples 500 --output results/slm_dataset_alpaca.jsonl
+```
+
+### 7. Run Advanced Scoring Benchmark (570,204 Evaluation Blocks)
 ```bash
 python scripts/evaluate_advanced_scoring.py --model_path deeplog_model_improved_v1.pt
 ```
 
-### 5. Run Sub-Millisecond Serving & Throughput Benchmark
+### 8. Run Sub-Millisecond Serving & Throughput Benchmark
 ```bash
 python scripts/benchmark_serving.py --model_path deeplog_model_improved_v1.pt --device cpu
 ```
 
-### 6. Run Live Multi-Node Streaming Simulator
+### 9. Run Live Multi-Node Streaming Simulator
 ```bash
 python scripts/streaming_simulator.py --max_events 5000 --use_jit
 ```

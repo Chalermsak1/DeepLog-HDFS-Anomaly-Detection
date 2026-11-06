@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: deeplog_infinity_usenix.aux
 The style file: plain.bst
 Database file #1: references.bib
-You've used 22 entries,
+You've used 24 entries,
             2118 wiz_defined-function locations,
-            630 strings with 8459 characters,
-and the built_in function-call counts, 9125 in all, are:
-= -- 901
-> -- 462
+            644 strings with 8829 characters,
+and the built_in function-call counts, 9804 in all, are:
+= -- 973
+> -- 488
 < -- 9
-+ -- 184
-- -- 162
-* -- 639
-:= -- 1449
-add.period$ -- 70
-call.type$ -- 22
-change.case$ -- 145
++ -- 194
+- -- 170
+* -- 690
+:= -- 1561
+add.period$ -- 76
+call.type$ -- 24
+change.case$ -- 155
 chr.to.int$ -- 0
-cite$ -- 22
-duplicate$ -- 344
-empty$ -- 687
-format.name$ -- 162
-if$ -- 1943
+cite$ -- 24
+duplicate$ -- 366
+empty$ -- 742
+format.name$ -- 170
+if$ -- 2082
 int.to.chr$ -- 0
-int.to.str$ -- 22
-missing$ -- 21
-newline$ -- 114
-num.names$ -- 44
-pop$ -- 166
+int.to.str$ -- 24
+missing$ -- 23
+newline$ -- 124
+num.names$ -- 48
+pop$ -- 172
 preamble$ -- 1
-purify$ -- 124
+purify$ -- 132
 quote$ -- 0
-skip$ -- 271
+skip$ -- 287
 stack$ -- 0
-substring$ -- 597
-swap$ -- 114
+substring$ -- 663
+swap$ -- 116
 text.length$ -- 9
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 86
+type$ -- 94
 warning$ -- 0
-while$ -- 87
-width$ -- 24
-write$ -- 244
+while$ -- 95
+width$ -- 26
+write$ -- 266

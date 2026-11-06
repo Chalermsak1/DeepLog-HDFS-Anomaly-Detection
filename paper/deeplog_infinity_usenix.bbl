@@ -61,6 +61,12 @@ Cynthia Dwork and Aaron Roth.
 \newblock {The Real Cost of Enterprise Data Center Downtime}.
 \newblock Gartner IT Key Metrics Data, 2023.
 
+\bibitem{gibbs2021adaptive}
+Isaac Gibbs and Emmanuel Cand{\`e}s.
+\newblock {Adaptive Conformal Inference Under Distribution Shift}.
+\newblock {\em Advances in Neural Information Processing Systems (NeurIPS)},
+  34:1660--1672, 2021.
+
 \bibitem{hafner2020dreamer}
 Danijar Hafner, Timothy Lillicrap, Jimmy Ba, and Mohammad Norouzi.
 \newblock {Dream to Control: Learning Behaviors by Latent Imagination}.
@@ -126,6 +132,12 @@ Konstantin Shvachko, Hairong Kuang, Sanjay Radia, and Robert Chansler.
 \newblock {The Hadoop Distributed File System}.
 \newblock In {\em Proceedings of the 2010 IEEE 26th Symposium on Mass Storage
   Systems and Technologies (MSST)}, pages 1--10. IEEE, 2010.
+
+\bibitem{van2014port}
+Arjan van~der Schaft and Dimitri Jeltsema.
+\newblock {Port-Hamiltonian Systems Theory: An Introductory Overview}.
+\newblock {\em Foundations and Trends in Systems and Control},
+  1(2--3):173--378, 2014.
 
 \bibitem{zhang2019logrobust}
 Xu~Zhang, Qingwei Lin, Yong Xu, Saravan Rajmohan, Dongmei Zhang, Yingnong Dang,

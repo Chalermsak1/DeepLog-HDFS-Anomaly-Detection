@@ -196,7 +196,7 @@ To enable preemptive rather than reactive mitigation, DeepLog-Infinity runs an i
 
 The \texttt{Counterfactual\allowbreak Dreamer} executes imagined rollouts up to $H = 300$ seconds into the future without applying actions to the physical cluster. When an imagined trajectory crosses the anomaly threshold $\tau_{\text{crit}}$, proactive control measures (e.g., preemptive container migration, dynamic BPF TCP window clamping) are triggered before actual hardware saturation manifests.
 
-\subsection{Pillar VI: Provable Safety (CBF \& Lyapunov)}
+\subsection[Pillar VI: Provable Safety (CBF and Lyapunov)]{Pillar VI: Provable Safety\\(CBF \& Lyapunov)}
 Automated control actions $\mathbf{u} \in \mathcal{U}$ (e.g., pod eviction, thread pool resizing) are screened by a Quadratic Programming (QP) safety filter. The safety set $\mathcal{C}$ is characterized by Control Barrier Functions (CBF) $h(\mathbf{x}) \ge 0$. Any proposed mitigation $\mathbf{u}_{\text{nominal}}$ from the AI agent is minimally projected onto the forward-invariant half-space:
 \begin{equation}
 \label{eq:cbf_qp}

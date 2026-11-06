@@ -17,6 +17,14 @@
 \usepackage{balance}
 \usepackage{subcaption}
 \usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{flushend}
+
+% Microtypography & Penalty Rules to Group Text and Prevent Confusion
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\predisplaypenalty=10000
 
 % Page Layout Margins (standard USENIX Security formatting: 0.75in margins, 10pt)
 \usepackage[top=0.75in, bottom=1.0in, left=0.75in, right=0.75in]{geometry}
@@ -49,6 +57,8 @@
 
 \begin{document}
 
+\twocolumn[
+  \begin{@twocolumnfalse}
 \maketitle
 
 % ------------------------------------------------------------------------------
@@ -61,6 +71,9 @@ We present \textbf{DeepLog-Infinity}, an autonomous, mathematically verified neu
 
 Evaluated on the full corpus of 570,204 HDFS production test blocks comprising 11,077,032 event transitions, DeepLog-Infinity achieves a state-of-the-art F1-score of 72.23\% via Cumulative Negative Log-Likelihood scoring (recovering $+11.2\%$ recall over canonical baselines), while Consecutive Violation filtering suppresses false alarms by 81.2\% (92.90\% precision). In adversarial multi-node Chaos Gym tournaments, the integrated neuro-immune controller reduces cluster blast radius by 95.5\% while maintaining 100\% SLA availability.
 \end{abstract}
+\vspace{1.5em}
+  \end{@twocolumnfalse}
+]
 
 % ------------------------------------------------------------------------------
 % 1. INTRODUCTION
@@ -75,14 +88,14 @@ Despite these pioneering contributions, modern hyperscale cloud operations have 
     \item \textbf{Disk I/O and User-Space Ingestion Bottleneck:} Traditional pipelines rely on user-space daemons (e.g., Fluentd, Logstash) periodically parsing text logs from disk or Unix sockets. Under heavy write loads, logging itself saturates CPU and storage bandwidth, distorting application timings (the \textit{Heisenbug} effect)~\cite{curtsinger2013coz}.
     \item \textbf{False Positive Fatigue and Truncation Blind Spots:} Canonical $k$-event window predictors are blind to sequence termination boundaries ($\langle\text{EOS}\rangle$) and struggle with short transactions. Furthermore, fixed top-$g$ candidate policies fail in production: a single benign software patch or out-of-order log record triggers spurious high-severity alerts, burning out Site Reliability Engineers (SREs).
     \item \textbf{Unsafe and Oscillatory Autonomous Remediation:} While reinforcement learning agents have been proposed to execute remediation scripts (e.g., node restarts, traffic throttling), uncontrolled auto-remediation frequently triggers disastrous feedback loops. Thundering-herd re-routing can destabilize surviving nodes, driving the cluster into catastrophic limit cycles~\cite{barham2003xen}.
-    \item \textbf{Siloed Threat Intelligence:} Zero-day attacks and widespread hardware flaws impact multiple cloud providers simultaneously. However, cross-enterprise threat intelligence sharing is forbidden by privacy regulations (GDPR, HIPAA) because raw logs contain proprietary IPs, hostnames, and user payloads.
+    \item \textbf{Siloed Threat Intelligence:} Zero-day vulnerabilities and widespread hardware flaws impact multiple cloud providers simultaneously. However, cross-enterprise threat intelligence sharing is forbidden by privacy regulations (GDPR, HIPAA) because raw logs contain proprietary IPs, hostnames, and user payloads.
 \end{enumerate}
 
 To overcome these structural limitations, we introduce \textbf{DeepLog-Infinity}, an autonomous, end-to-end neuro-immune system. DeepLog-Infinity redesigns log anomaly detection across the entire systems stack---from in-kernel telemetry capture to formal control theory and cryptographic privacy.
 
 \noindent\textbf{Key Contributions:}
 \begin{itemize}[leftmargin=*]
-    \item \textbf{Sub-Microsecond Zero-IO Ingestion:} We develop a native C eBPF kernel probe (\texttt{deeplog\_kern.bpf.c}) coupled with a 10,000-bit Vector Symbolic Architecture (HDC) holographic memory~\cite{kanerva2009hyperdimensional}. In-kernel Hamming distance matching achieves $0.293\,\mu\text{s}$ per-event classification latency with zero file-system I/O.
+    \item \textbf{Sub-Microsecond Zero-IO Ingestion:} We develop a native C eBPF kernel probe (\texttt{deeplog\_\allowbreak kern.bpf.c}) coupled with a 10,000-bit Vector Symbolic Architecture (HDC) holographic memory~\cite{kanerva2009hyperdimensional}. In-kernel Hamming distance matching achieves $0.293\,\mu\text{s}$ per-event classification latency with zero file-system I/O.
     \item \textbf{OpenTelemetry (OTel) Full-Stack Convergence (MELT):} We synchronize Metrics, Events, Logs, distributed Traces, and continuous eBPF Profiles into a unified multimodal Transformer cross-attention network, isolating root-cause fault surfaces across software and hardware layers.
     \item \textbf{Physics-Informed Neural Queuing Operators (PISNO):} We integrate open Jackson Queue Networks~\cite{jackson1957networks} and Erlang-C waiting time equations into the neural loss function, enforcing Little's Law conservation invariants ($|L - \lambda W| \le \epsilon$)~\cite{little1961proof} to eliminate physically implausible state estimations.
     \item \textbf{Code-Grounded Neuro-Symbolic AST Duality:} We construct a bidirectional graph mapping abstract log templates to exact Java Abstract Syntax Tree (AST) coordinates and Git blame history, enabling automated synthesis of unified Git \texttt{.patch} diffs and JUnit test harnesses.
@@ -95,6 +108,7 @@ To overcome these structural limitations, we introduce \textbf{DeepLog-Infinity}
 % ------------------------------------------------------------------------------
 % 2. THREAT MODEL & BACKGROUND
 % ------------------------------------------------------------------------------
+\needspace{5\baselineskip}
 \section{Background and Threat Model}
 \label{sec:threat_model}
 
@@ -120,12 +134,13 @@ We consider a distributed cloud execution environment comprising $N$ compute nod
 % ------------------------------------------------------------------------------
 % 3. SYSTEM ARCHITECTURE (7 PILLARS)
 % ------------------------------------------------------------------------------
+\needspace{5\baselineskip}
 \section{System Architecture}
 \label{sec:architecture}
 The architecture of DeepLog-Infinity is structured around seven foundational pillars, spanning kernel telemetry, multimodal fusion, physical invariants, symbolic reasoning, predictive simulation, formal safety, and cryptographic federation.
 
 \subsection{Pillar I: In-Kernel eBPF \& Holographic HDC}
-Instead of relying on user-space syslog aggregators, DeepLog-Infinity deploys an authentic C eBPF kernel program (\texttt{deeplog\_kern.bpf.c}) attached to raw socket tracepoints (\texttt{sock:inet\_sock\_set\_state}, \texttt{sched:sched\_process\_exec}). Events are encapsulated in a 64-byte cache-line aligned struct:
+Instead of relying on user-space syslog aggregators, DeepLog-Infinity deploys an authentic C eBPF kernel program (\texttt{deeplog\_\allowbreak kern.bpf.c}) attached to raw socket tracepoints (\texttt{sock:\allowbreak inet\_\allowbreak sock\_\allowbreak set\_\allowbreak state}, \texttt{sched:\allowbreak sched\_\allowbreak process\_\allowbreak exec}). Events are encapsulated in a 64-byte cache-line aligned struct:
 \begin{small}
 \begin{verbatim}
 struct trace_event {
@@ -141,7 +156,7 @@ struct trace_event {
 };
 \end{verbatim}
 \end{small}
-Events are written into a non-blocking \texttt{BPF\_MAP\_TYPE\_RINGBUF} with zero memory copies. To evaluate anomaly deviations directly in kernel space without invoking expensive floating-point neural forward passes, DeepLog-Infinity maps discrete event tuples to 10,000-bit bipolar hypervectors $\mathbf{h} \in \{-1, +1\}^D$ ($D = 10{,}000$) within a Vector Symbolic Architecture (HDC)~\cite{kanerva2009hyperdimensional}. Sequence binding is computed via coordinate-wise XOR ($\oplus$) and cyclic permutation ($\Pi$):
+Events are written into a non-blocking \texttt{BPF\_\allowbreak MAP\_\allowbreak TYPE\_\allowbreak RINGBUF} with zero memory copies. To evaluate anomaly deviations directly in kernel space without invoking expensive floating-point neural forward passes, DeepLog-Infinity maps discrete event tuples to 10,000-bit bipolar hypervectors $\mathbf{h} \in \{-1, +1\}^D$ ($D = 10{,}000$) within a Vector Symbolic Architecture (HDC)~\cite{kanerva2009hyperdimensional}. Sequence binding is computed via coordinate-wise XOR ($\oplus$) and cyclic permutation ($\Pi$):
 \begin{equation}
 \label{eq:hdc_binding}
 \mathbf{h}_{\text{seq}} = \bigoplus_{i=1}^h \Pi^{h-i} \mathbf{v}(k_{t-i})
@@ -153,9 +168,9 @@ To eliminate Out-of-Vocabulary (OOV) collapse caused by format string mutations 
 \subsection{Pillar II: Multi-Modal OTel Convergence (MELT)}
 DeepLog-Infinity natively unifies the four pillars of modern observability: Metrics (Prometheus timeseries), Events (Kubernetes lifecycle state changes), Logs (HDFS template streams), Traces (OpenTelemetry distributed RPC spans), and continuous Profiling (eBPF folded call stacks). 
 
-The \texttt{TelemetryFusionModel} employs a cross-attention multimodal Transformer. Tokenized log sequences $\mathbf{Z}_L \in \mathbb{R}^{T_L \times d}$, metric vectors $\mathbf{Z}_M \in \mathbb{R}^{T_M \times d}$, trace spans $\mathbf{Z}_T \in \mathbb{R}^{T_T \times d}$, and profile embeddings $\mathbf{Z}_P \in \mathbb{R}^{T_P \times d}$ are projected into a common latent representation $\mathbf{z}_{\text{system}} \in \mathbb{R}^{d}$. A cross-modal attribution layer calculates gradient saliencies $\frac{\partial \mathcal{L}}{\partial \mathbf{Z}_k}$ to determine whether anomalous entropy originates from CPU/memory saturation, lock contention, network latency, or application logic exceptions.
+The \texttt{Telemetry\allowbreak Fusion\allowbreak Model} employs a cross-attention multimodal Transformer. Tokenized log sequences $\mathbf{Z}_L \in \mathbb{R}^{T_L \times d}$, metric vectors $\mathbf{Z}_M \in \mathbb{R}^{T_M \times d}$, trace spans $\mathbf{Z}_T \in \mathbb{R}^{T_T \times d}$, and profile embeddings $\mathbf{Z}_P \in \mathbb{R}^{T_P \times d}$ are projected into a common latent representation $\mathbf{z}_{\text{system}} \in \mathbb{R}^{d}$. A cross-modal attribution layer calculates gradient saliencies $\frac{\partial \mathcal{L}}{\partial \mathbf{Z}_k}$ to determine whether anomalous entropy originates from CPU/memory saturation, lock contention, network latency, or application logic exceptions.
 
-\subsection{Pillar III: Physics-Informed Queuing (PISNO)}
+\subsection{Pillar III: Physics-Informed Queuing}
 Distributed clusters obey physical conservation laws governing finite queues. In DeepLog-Infinity, the neural temporal estimator (\texttt{TimeAwareDeepLog}) is constrained by a Physics-Informed Neural Operator (PISNO) modeling the cluster as an open Jackson Queue Network of $M$ nodes. Let $\lambda_i$ denote the arrival rate, $\mu_i$ the service rate, $c_i$ the thread worker concurrency, and $W_i$ the observed waiting duration. The queuing balance equations mandate:
 \begin{equation}
 \label{eq:jackson_balance}
@@ -172,14 +187,14 @@ where $\gamma_i$ is exogenous ingress and $P_{ji}$ is the routing probability ma
 This penalty mathematically prevents the network from accepting predictions where queue depths violate flow conservation.
 
 \subsection{Pillar IV: Neuro-Symbolic AST Duality}
-Unlike black-box anomaly detectors that output arbitrary cluster IDs, DeepLog-Infinity links each of the 29 HDFS event templates to concrete Java Abstract Syntax Tree (AST) coordinates within the Hadoop codebase (e.g., \texttt{org.apache.hadoop.hdfs.}\allowbreak\texttt{server.datanode.DataXceiver}). 
+Unlike black-box anomaly detectors that output arbitrary cluster IDs, DeepLog-Infinity links each of the 29 HDFS event templates to concrete Java Abstract Syntax Tree (AST) coordinates within the Hadoop codebase (e.g., \texttt{org.\allowbreak apache.\allowbreak hadoop.\allowbreak hdfs.\allowbreak server.\allowbreak datanode.\allowbreak DataXceiver}). 
 
-Upon detecting an anomaly, the \texttt{NeuroSymbolicBridge} performs backward path tracing across the call graph, identifies the faulting method (e.g., socket read timeout in \texttt{BlockReceiver.receiveBlock()}), inspects historical Git commits via \texttt{git blame}, and synthesizes a verifiable unified diff patch (\texttt{.patch}) along with an executable JUnit regression test.
+Upon detecting an anomaly, the \texttt{Neuro\allowbreak Symbolic\allowbreak Bridge} performs backward path tracing across the call graph, identifies the faulting method (e.g., socket read timeout in \texttt{BlockReceiver.\allowbreak receiveBlock()}), inspects historical Git commits via \texttt{git blame}, and synthesizes a verifiable unified diff patch (\texttt{.patch}) along with an executable JUnit regression test.
 
 \subsection{Pillar V: Recurrent State Space World Model}
 To enable preemptive rather than reactive mitigation, DeepLog-Infinity runs an in-memory Recurrent State Space Model (RSSM)~\cite{hafner2020dreamer}. The model maintains a deterministic recurrent state $\mathbf{h}_t = f(\mathbf{h}_{t-1}, \mathbf{s}_{t-1}, \mathbf{a}_{t-1})$ and a stochastic belief state $\mathbf{s}_t \sim q(\mathbf{s}_t \mid \mathbf{h}_t, \mathbf{x}_t)$. 
 
-The \texttt{CounterfactualDreamer} executes imagined rollouts up to $H = 300$ seconds into the future without applying actions to the physical cluster. When an imagined trajectory crosses the anomaly threshold $\tau_{\text{crit}}$, proactive control measures (e.g., preemptive container migration, dynamic BPF TCP window clamping) are triggered before actual hardware saturation manifests.
+The \texttt{Counterfactual\allowbreak Dreamer} executes imagined rollouts up to $H = 300$ seconds into the future without applying actions to the physical cluster. When an imagined trajectory crosses the anomaly threshold $\tau_{\text{crit}}$, proactive control measures (e.g., preemptive container migration, dynamic BPF TCP window clamping) are triggered before actual hardware saturation manifests.
 
 \subsection{Pillar VI: Provable Safety (CBF \& Lyapunov)}
 Automated control actions $\mathbf{u} \in \mathcal{U}$ (e.g., pod eviction, thread pool resizing) are screened by a Quadratic Programming (QP) safety filter. The safety set $\mathcal{C}$ is characterized by Control Barrier Functions (CBF) $h(\mathbf{x}) \ge 0$. Any proposed mitigation $\mathbf{u}_{\text{nominal}}$ from the AI agent is minimally projected onto the forward-invariant half-space:
@@ -190,9 +205,9 @@ Automated control actions $\mathbf{u} \in \mathcal{U}$ (e.g., pod eviction, thre
 \text{s.t.} \;\; & L_f h(\mathbf{x}) + L_g h(\mathbf{x})\mathbf{u} + \alpha(h(\mathbf{x})) \ge 0
 \end{split}
 \end{equation}
-Furthermore, the closed-loop system is certified by a Discrete Lyapunov Stability Verifier enforcing $\Delta V(\mathbf{x}_t) = V(\mathbf{x}_{t+1}) - V(\mathbf{x}_t) \le -\kappa V(\mathbf{x}_t)$, guaranteeing that remediations decay exponentially back to steady-state equilibrium without inducing thundering-herd oscillations. The resulting safe control vector $\mathbf{u}^*$ is deployed directly into in-kernel eBPF XDP and Traffic Control (TC) driver maps (\texttt{xdp\_actuator.c}), enabling deterministic canary traffic shedding and wire-speed packet filtering at $< 0.5\,\mu\text{s}$ latency.
+Furthermore, the closed-loop system is certified by a Discrete Lyapunov Stability Verifier enforcing $\Delta V(\mathbf{x}_t) = V(\mathbf{x}_{t+1}) - V(\mathbf{x}_t) \le -\kappa V(\mathbf{x}_t)$, guaranteeing that remediations decay exponentially back to steady-state equilibrium without inducing thundering-herd oscillations. The resulting safe control vector $\mathbf{u}^*$ is deployed directly into in-kernel eBPF XDP and Traffic Control (TC) driver maps (\texttt{xdp\_\allowbreak actuator.c}), enabling deterministic canary traffic shedding and wire-speed packet filtering at $< 0.5\,\mu\text{s}$ latency.
 
-\subsection{Pillar VII: Federated Zero-Knowledge Threat Mesh}
+\subsection{Pillar VII: Federated Zero-Knowledge Mesh}
 DeepLog-Infinity nodes form a decentralized peer-to-peer gossip network. When a zero-day exploit or rare Byzantine anomaly is isolated, the local node encodes the sequence trajectory into a 10,000-bit threat hypervector $\mathbf{h}_{\text{threat}}$. 
 
 To safeguard tenant privacy, the hypervector is perturbed via an $(\epsilon, \delta)$-differential privacy mechanism using calibrated Bernoulli bit-flipping ($q = 1 / (1 + e^{\epsilon})$). Authenticity is proven using Schnorr Non-Interactive Zero-Knowledge (NIZK) proofs over the Edwards-curve Curve25519 ($s B \stackrel{?}{=} R + e V$) via the Fiat-Shamir transformation. Peers verify that the sender genuinely encountered the anomalous failure mode without learning any underlying internal IP addresses, user data, or confidential log payloads.
@@ -200,6 +215,7 @@ To safeguard tenant privacy, the hypervector is perturbed via an $(\epsilon, \de
 % ------------------------------------------------------------------------------
 % 4. MATHEMATICAL FOUNDATIONS
 % ------------------------------------------------------------------------------
+\needspace{5\baselineskip}
 \section{Mathematical Foundations}
 \label{sec:math}
 In this section, we provide formal mathematical proofs establishing the safety, stability, collision resistance, and physical conservation guarantees of DeepLog-Infinity.
@@ -229,6 +245,7 @@ The function $h(\mathbf{x})$ is an extended Control Barrier Function (CBF) if th
 where $L_f h(\mathbf{x}) = \nabla h(\mathbf{x}) \cdot f(\mathbf{x})$ and $L_g h(\mathbf{x}) = \nabla h(\mathbf{x}) \cdot g(\mathbf{x})$ are Lie derivatives.
 \end{definition}
 
+\needspace{5\baselineskip}
 \begin{theorem}[Forward Invariance and Provable Safety]
 \label{thm:cbf_safety}
 Let $\mathcal{C}$ be the safe set defined by $h(\mathbf{x}) \ge 0$. Suppose the nominal remediation input $\mathbf{u}_{\text{nominal}}$ is filtered by the Quadratic Program:
@@ -262,6 +279,7 @@ To ensure that automated mitigations do not induce sustained oscillations or cha
 \end{equation}
 where $\mathbf{A}_c$ is the closed-loop transition matrix under the stabilizing controller and $\|\mathbf{w}_t\| \le \sigma_w$ is bounded system noise.
 
+\needspace{5\baselineskip}
 \begin{theorem}[Exponential Contraction and Non-Oscillatory Boundedness]
 \label{thm:lyapunov_stability}
 Let $V(\mathbf{e}_t) = \mathbf{e}_t^T \mathbf{P} \mathbf{e}_t$ be a candidate Lyapunov function where $\mathbf{P} \in \mathbb{R}^{n \times n}$ is a symmetric positive definite matrix ($\mathbf{P} \succ 0$) satisfying the discrete Lyapunov equation $\mathbf{A}_c^T \mathbf{P} \mathbf{A}_c - \mathbf{P} = -\mathbf{Q}$ for some $\mathbf{Q} \succ 0$. If the controller enforces the drift contraction condition:
@@ -286,7 +304,7 @@ Since $0 < \kappa \le 1$, we have $|1 - \kappa| < 1$. Taking the limit as $t \to
 \begin{equation}
 \limsup_{t \to \infty} V(\mathbf{e}_t) \le \frac{\zeta}{\kappa}
 \end{equation}
-By Rayleigh-Ritz theorem, $\lambda_{\min}(\mathbf{P}) \|\mathbf{e}_t\|^2 \le V(\mathbf{e}_t) \le \lambda_{\max}(\mathbf{P}) \|\mathbf{e}_t\|^2$. Thus:
+By the Rayleigh-Ritz theorem, $\lambda_{\min}(\mathbf{P}) \|\mathbf{e}_t\|^2 \le V(\mathbf{e}_t)$ and $V(\mathbf{e}_t) \le \lambda_{\max}(\mathbf{P}) \|\mathbf{e}_t\|^2$. Thus:
 \begin{align}
 \|\mathbf{e}_t\| &\le \sqrt{\frac{V(\mathbf{e}_t)}{\lambda_{\min}(\mathbf{P})}} \nonumber \\
 &\le \sqrt{\frac{\lambda_{\max}(\mathbf{P})}{\lambda_{\min}(\mathbf{P})}} (1 - \kappa)^{t/2} \|\mathbf{e}_0\| + \sqrt{\frac{\zeta}{\kappa \lambda_{\min}(\mathbf{P})}}
@@ -297,6 +315,7 @@ The transient term decays exponentially at rate $\ln(1 - \kappa)^{-1/2}$, provin
 \subsection{HDC 10,000-bit Hypervector Hamming Distance Bounds}
 In Hyperdimensional Computing (HDC)~\cite{kanerva2009hyperdimensional}, event sequences are mapped into a $D$-dimensional binary hypercube $\mathcal{H} = \{0, 1\}^D$ with $D = 10{,}000$.
 
+\needspace{5\baselineskip}
 \begin{theorem}[Orthogonal Collision Bound in High-Dimensional Space]
 \label{thm:hdc_bound}
 Let $\mathbf{u}, \mathbf{v} \in \{0, 1\}^D$ be two independent, uniformly distributed random hypervectors representing distinct log sequences. The normalized Hamming distance $d_H(\mathbf{u}, \mathbf{v}) / D = \frac{1}{D} \sum_{i=1}^D (u_i \oplus v_i)$ has expected value $\mathbb{E}[d_H/D] = 0.5$. For an anomaly match threshold $\theta \in (0, 0.5)$, the probability of an erroneous false collision is bounded by:
@@ -331,6 +350,7 @@ Therefore, $\mathbb{P} \le e^{-50} \approx 1.9287 \times 10^{-22}$, establishing
 \subsection{Jackson Queue Network \& Little's Law Invariant}
 We consider an open Jackson network~\cite{jackson1957networks} of $M$ servers representing microservice tiers.
 
+\needspace{5\baselineskip}
 \begin{theorem}[Jackson Network Equilibrium and Little's Law Conservation]
 \label{thm:jackson_littles}
 Let $\mathbf{P} = (P_{ij}) \in [0, 1]^{M \times M}$ be the routing probability matrix, where the spectral radius $\rho(\mathbf{P}) < 1$, and $\boldsymbol{\gamma} = (\gamma_1, \dots, \gamma_M)^T > \mathbf{0}$ be the exogenous arrival vector. The equilibrium arrival rates $\boldsymbol{\lambda} = (\lambda_1, \dots, \lambda_M)^T$ exist, are unique, and satisfy:
@@ -371,6 +391,7 @@ In distributed computing systems, queue backlogs and processing velocities const
 \end{equation}
 where $\mathbf{J}(\mathbf{x}) = -\mathbf{J}(\mathbf{x})^T$ is an antisymmetric routing interconnection matrix, $\mathbf{R}(\mathbf{x}) \succeq 0$ is a symmetric positive semi-definite dissipation matrix, $\mathcal{H}(\mathbf{x}) = \frac{1}{2} \mathbf{x}^T \mathbf{M} \mathbf{x}$ ($\mathbf{M} \succ 0$) is the stored queue energy, and $(\mathbf{u}, \mathbf{y})$ are port conjugate variables.
 
+\needspace{5\baselineskip}
 \begin{theorem}[Strict Energy Passivity and Unconditional Stability]
 \label{thm:port_hamiltonian_passivity}
 Under Port-Hamiltonian dynamics, the rate of total stored system energy satisfies the passivity inequality:
@@ -396,6 +417,7 @@ When unforced ($\mathbf{u} = \mathbf{0}$), $\frac{d\mathcal{H}}{dt} = -(\nabla \
 \label{sec:math_conformal}
 To eliminate empirical threshold tuning, DeepLog-Infinity employs finite-sample Adaptive Conformal Inference (ACI)~\cite{gibbs2021adaptive}. Given target false alarm significance level $\alpha^* \in (0, 1)$, dynamic quantile $\hat{q}_t$, and step non-conformity score $s_t$:
 
+\needspace{5\baselineskip}
 \begin{theorem}[Finite-Sample Non-Exchangeable Error Convergence]
 \label{thm:conformal_convergence}
 Under the adaptive significance tracking rule $\alpha_{t+1} = \alpha_t + \gamma (\alpha^* - \mathbf{1}_{\{s_t > \hat{q}_t(\alpha_t)\}})$ with learning rate $\gamma > 0$, the empirical false discovery error rate over horizon $T$ under arbitrary non-stationary concept drift satisfies:
@@ -418,6 +440,7 @@ Since $\alpha_t \in [\alpha_{\min}, \alpha_{\max}]$ is compact, $|\alpha_{T+1} -
 % ------------------------------------------------------------------------------
 % 5. EMPIRICAL BENCHMARK RESULTS
 % ------------------------------------------------------------------------------
+\needspace{5\baselineskip}
 \section{Empirical Benchmark Results}
 \label{sec:experiments}
 We evaluated DeepLog-Infinity on the complete canonical HDFS benchmark dataset~\cite{du2017deeplog,shvachko2010hadoop}. The evaluation corpus comprises all \textbf{570,204 test blocks} (553,366 normal transaction blocks and 16,838 ground-truth labeled anomalous blocks), accounting for \textbf{11,077,032 sequential log event transitions}.
@@ -485,7 +508,7 @@ TorchScript JIT (Apple MPS) & 1,024 & 3.905\,ms & \textbf{262,211 seq/s} \\
 The HDC Holographic Core achieves an average execution latency of \textbf{0.293 $\mu$s} ($0.29\,\mu\text{s}$), sustaining over \textbf{3.4 million operations per second} per CPU core. Numerical equivalence between native PyTorch execution and the compiled TorchScript JIT graph was strictly verified: $\max |y_{\text{native}} - y_{\text{jit}}| < 4.77 \times 10^{-6}$.
 
 \subsection{Adversarial Chaos Gym Self-Play}
-In the distributed Chaos Gym environment, an Actor-Critic \texttt{RedChaosAgent} subjected a 16-node cluster to concurrent thread pool starvation, $25\%$ packet loss, and Byzantine slowloris delays over 1,000 multi-step tournament episodes.
+In the distributed Chaos Gym environment, an Actor-Critic \texttt{Red\allowbreak Chaos\allowbreak Agent} subjected a 16-node cluster to concurrent thread pool starvation, $25\%$ packet loss, and Byzantine slowloris delays over 1,000 multi-step tournament episodes.
 
 \begin{figure}[t]
 \centering
@@ -507,7 +530,7 @@ CBF Invariant Breaches & 142 events & \textbf{0 events (Provable)} \\
 \label{fig:chaos_results}
 \end{figure}
 
-As shown in Figure~\ref{fig:chaos_results}, the \texttt{BlueImmuneAgent}, constrained by the QP-CBF safety filter, reduced the mean cluster blast radius from 88.4\% down to \textbf{4.0\%}---a \textbf{95.5\% blast radius reduction}. It simultaneously suppressed P99 tail latency by \textbf{39.8\%} while preserving \textbf{100\% SLA availability} without a single barrier invariant violation.
+As shown in Figure~\ref{fig:chaos_results}, the \texttt{Blue\allowbreak Immune\allowbreak Agent}, constrained by the QP-CBF safety filter, reduced the mean cluster blast radius from 88.4\% down to \textbf{4.0\%}---a \textbf{95.5\% blast radius reduction}. It simultaneously suppressed P99 tail latency by \textbf{39.8\%} while preserving \textbf{100\% SLA availability} without a single barrier invariant violation.
 
 \subsection{Empirical Ablation Study}
 \label{sec:ablation}
@@ -607,6 +630,7 @@ Safety Guarantee & \textbf{CBF-QP + PHS} & None (Heuristic) & None (Attention) &
 % ------------------------------------------------------------------------------
 % 6. DISCUSSION
 % ------------------------------------------------------------------------------
+\needspace{5\baselineskip}
 \section{Discussion}
 \label{sec:discussion}
 \textbf{Operational Trade-Offs in Production:} The dual scoring strategy of DeepLog-Infinity addresses the conflicting requirements of cloud operations:
@@ -622,6 +646,7 @@ Safety Guarantee & \textbf{CBF-QP + PHS} & None (Heuristic) & None (Attention) &
 % ------------------------------------------------------------------------------
 % 7. RELATED WORK
 % ------------------------------------------------------------------------------
+\needspace{5\baselineskip}
 \section{Related Work}
 \label{sec:related_work}
 \noindent\textbf{Deep Learning for Log Anomaly Detection:} Du et al.~\cite{du2017deeplog} introduced DeepLog, establishing LSTM next-token prediction over parsed log sequences. LogAnomaly~\cite{meng2019loganomaly} incorporated template-level semantic vectors, while LogRobust~\cite{zhang2019logrobust} utilized Bi-LSTM architectures with attention to handle log message instability. Drain~\cite{he2017drain} optimized online log template extraction using fixed-depth parse trees. DeepLog-Infinity advances this lineage by replacing ad-hoc heuristic thresholds with continuous Cumulative NLL, introducing $\langle\text{EOS}\rangle$ boundary modeling, and achieving a new benchmark SOTA F1-score of 72.23\% on 570k blocks.
@@ -633,6 +658,7 @@ Safety Guarantee & \textbf{CBF-QP + PHS} & None (Heuristic) & None (Attention) &
 % ------------------------------------------------------------------------------
 % 8. CONCLUSION
 % ------------------------------------------------------------------------------
+\needspace{5\baselineskip}
 \section{Conclusion}
 \label{sec:conclusion}
 We presented DeepLog-Infinity, an autonomous neuro-immune operating platform for hyperscale cloud observability. DeepLog-Infinity addresses the long-standing bottlenecks of log anomaly detection: replacing disk I/O with $0.29\,\mu\text{s}$ in-kernel eBPF hyperdimensional computing; unifying metrics, events, logs, traces, and profiles under physics-informed Jackson queuing constraints; guaranteeing operational safety through Quadratic Programming Control Barrier Functions and Discrete Lyapunov stability; and enabling privacy-preserving cross-tenant threat sharing via Curve25519 Zero-Knowledge proofs. Rigorous empirical evaluation over all 570,204 HDFS production test blocks establishes a new SOTA F1-score of 72.23\%, an 81.2\% reduction in false alerts, and a 95.5\% blast radius reduction under active adversarial chaos, paving the way for provably safe, autonomous cloud infrastructure.

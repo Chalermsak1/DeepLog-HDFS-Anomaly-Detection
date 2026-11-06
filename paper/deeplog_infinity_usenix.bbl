@@ -1,11 +1,23 @@
 \begin{thebibliography}{10}
 
+\bibitem{achiam2023gpt4}
+Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya,
+  Florencia~Leoni Aleman, Diogo Almeida, Janko Altenschmidt, Sam Altman,
+  Shyamal Anadkat, et~al.
+\newblock {GPT-4 Technical Report}.
+\newblock {\em arXiv preprint arXiv:2303.08774}, 2023.
+
 \bibitem{ames2019control}
 Aaron~D. Ames, Samuel Coogan, Magnus Egerstedt, Gennaro Notomista, Koushil
   Sreenath, and Paulo Tabuada.
 \newblock {Control Barrier Functions: Theory and Applications}.
 \newblock {\em Proceedings of the 18th European Control Conference (ECC)},
   pages 3420--3431, 2019.
+
+\bibitem{anthropic2024claude}
+{Anthropic}.
+\newblock {The Claude 3.5 Sonnet Model Family}.
+\newblock \url{https://www.anthropic.com/news/claude-3-5-sonnet}, 2024.
 
 \bibitem{barham2003xen}
 Paul Barham, Boris Dragovic, Keir Fraser, Steven Hand, Tim Harris, Alex Ho,
@@ -18,6 +30,12 @@ Paul Barham, Boris Dragovic, Keir Fraser, Steven Hand, Tim Harris, Alex Ho,
 Daniel~J. Bernstein, Niels Duif, Tanja Lange, Peter Schwabe, and Bo-Yin Yang.
 \newblock {High-speed high-security signatures}.
 \newblock {\em Journal of Cryptographic Engineering}, 2(2):77--89, 2012.
+
+\bibitem{chen2024dbot}
+Zhibo Chen, Guoliang Li, and Nan Tang.
+\newblock {D-Bot: Database Anomaly Diagnosis through Large Language Models}.
+\newblock In {\em Proceedings of the ACM Web Conference 2024 (WWW)}, pages
+  1624--1635, 2024.
 
 \bibitem{curtsinger2013coz}
 Charlie Curtsinger and Emery~D. Berger.
@@ -37,6 +55,11 @@ Cynthia Dwork and Aaron Roth.
 \newblock {The Algorithmic Foundations of Differential Privacy}.
 \newblock {\em Foundations and Trends in Theoretical Computer Science},
   9(3--4):211--407, 2014.
+
+\bibitem{gartner2023downtime}
+{Gartner Research}.
+\newblock {The Real Cost of Enterprise Data Center Downtime}.
+\newblock Gartner IT Key Metrics Data, 2023.
 
 \bibitem{hafner2020dreamer}
 Danijar Hafner, Timothy Lillicrap, Jimmy Ba, and Mohammad Norouzi.

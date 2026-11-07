@@ -15,6 +15,11 @@
 
 An enterprise-grade, empirical implementation and architectural evolution of **DeepLog** (Du et al., ACM CCS 2017) applied to large-scale **Hadoop Distributed File System (HDFS)** log sequence anomaly detection, scaling into **DeepLog-Omni** and **DeepLog-Infinity: The Autonomous Neuro-Immune Operating System**.
 
+<div align="center">
+  <img src="docs/images/cockpit_dashboard.png" width="96%" alt="DeepLog Mission Control Cockpit" style="border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.35); margin: 18px 0;" />
+  <p><em>Figure 1: DeepLog Mission Control Cockpit — Live operational telemetry stream, SOTA anomaly detection, Control Barrier Functions safety polytope, and zero-knowledge federated threat sharing.</em></p>
+</div>
+
 ---
 
 ## 🌟 What This Repository Contains
@@ -81,6 +86,7 @@ An enterprise-grade, empirical implementation and architectural evolution of **D
 - [The 5 Foundational Pillars of Cyber-Physical Cloud Observability](#the-5-foundational-pillars-of-cyber-physical-cloud-observability)
 - [DeepLog Mission Control Platform & Kubernetes Deployment](#deeplog-mission-control-platform--kubernetes-deployment)
 - [DeepLog Enterprise Horizons & Academic Research Paper](#deeplog-enterprise-horizons--academic-research-paper)
+- [IPITEx 2027 International Exposition & Research Poster](#ipitex-2027-international-exposition--research-poster)
 - [Project Structure](#project-structure)
 - [Quickstart & Reproducibility Guide](#quickstart--reproducibility-guide)
 - [Interactive Streamlit Dashboard](#interactive-streamlit-dashboard)
@@ -154,6 +160,23 @@ All models were evaluated on the complete **570,204 evaluation blocks** (553,366
 > - **False Positive Suppression (-81.2%)**: Consecutive Violations ($g=4, c=2$) slashes false positive alerts from 1,683 down to **317 blocks**, driving precision to **92.90%** (ideal for PagerDuty on-call shifts).
 > - **Audit & Threat Hunting Mode (99.99% Recall)**: Cumulative NLL at $\tau = 0.40$ catches **16,836 out of 16,838 anomaly blocks** (only 2 misses in 570k blocks).
 
+<p align="center">
+  <img src="results/figures/scoring_precision_recall.png" width="49%" alt="Scoring Strategies Precision-Recall Curve" />
+  <img src="results/figures/nll_threshold_sweep.png" width="49%" alt="Cumulative NLL Threshold Sweep" />
+</p>
+<p align="center"><em>Figure 2: Empirical Precision-Recall trade-off across scoring strategies on 570,204 HDFS test blocks (left), and Cumulative NLL threshold sensitivity (right).</em></p>
+
+<p align="center">
+  <img src="results/figures/confusion_matrix.png" width="49%" alt="DeepLog Confusion Matrix" />
+  <img src="results/figures/topk_accuracy.png" width="49%" alt="Next-Event Prediction Top-K Accuracy" />
+</p>
+<p align="center"><em>Figure 3: Block-level confusion matrix on 570,204 test blocks (left), and next-event prediction Top-K accuracy scaling from 90.05% to 99.91% (right).</em></p>
+
+<p align="center">
+  <img src="results/figures/topk_block_tradeoff.png" width="95%" alt="Block Detection vs Top-g Window and FPR Reduction" />
+</p>
+<p align="center"><em>Figure 4: Block-level precision/recall/F1 trade-off (left) and logarithmic false-positive rate reduction across candidate window sizes $g$ (right).</em></p>
+
 ---
 
 ### 2. Sub-Microsecond Serving Benchmarks (PyTorch JIT, Native eBPF & HDC)
@@ -169,6 +192,24 @@ All models were evaluated on the complete **570,204 evaluation blocks** (553,366
 | **TorchScript JIT (Apple Silicon MPS)**| 32,768 | 133.65 ms | 146.88 ms | **245,175 samples/sec** |
 
 Numerical parity between native PyTorch and TorchScript JIT is verified: $\max |y_{\text{native}} - y_{\text{jit}}| < 4.77 \times 10^{-6}$.
+
+<p align="center">
+  <img src="results/figures/serving_benchmark.png" width="62%" alt="TorchScript JIT Serving Throughput and Tail Latency" />
+  <img src="results/figures/streaming_latency.png" width="36%" alt="Live Streaming Latency Breakdown" />
+</p>
+<p align="center"><em>Figure 5: TorchScript JIT inference throughput and p99 tail latency on CPU and Apple Silicon MPS (left), and live streaming simulator latency breakdown (right).</em></p>
+
+---
+
+## HDFS Dataset & Log Structure
+
+The Hadoop Distributed File System (HDFS) log corpus comprises **11,077,032 event transitions** grouped across **570,204 execution blocks** (553,366 normal blocks and 16,838 anomaly blocks). Events are parsed into 29 canonical event templates ($E_1$ through $E_{29}$) representing block life-cycle states (allocation, verification, packet responders, replication, and termination).
+
+<p align="center">
+  <img src="results/figures/event_transitions.png" width="49%" alt="Event Transition Matrix" />
+  <img src="results/figures/event_frequency.png" width="49%" alt="Event Frequency Distribution" />
+</p>
+<p align="center"><em>Figure 6: Empirical 29-template Markov event transition probability matrix (left), and HDFS log event occurrence distribution (right).</em></p>
 
 ---
 
@@ -329,6 +370,11 @@ A reactive 6-tab Streamlit mission control cockpit providing real-time visibilit
   7. *AI SRE Copilot Interactive Incident Response*
 - Features rich ANSI terminal formatting, step-by-step progress bars, and `--headless` / `--export-json` options for automated CI/CD integration.
 
+<p align="center">
+  <img src="docs/images/showcase_terminal.png" width="90%" alt="Grand Showcase Terminal Output" style="border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.35); margin: 12px 0;" />
+</p>
+<p align="center"><em>Figure 7: Authentic Master Showcase terminal execution output verifying all 7 deep defense pillars with formal CBF invariant margins, Lyapunov stability proof, and full convergence scorecard.</em></p>
+
 ### 4. Cloud-Native Kubernetes Operator & Helm Architecture (`deploy/k8s/`, `src/deeplog/k8s_manager.py`)
 - **Custom Resource Definitions (CRDs)**:
   - `DeepLogCluster` (`crd/deeplog_crd.yaml`): Declarative specification for cluster orchestration, neural backbones, eBPF probe modes, and mesh federations.
@@ -396,6 +442,17 @@ A reactive 6-tab Streamlit mission control cockpit providing real-time visibilit
 
 ---
 
+## IPITEx 2027 International Exposition & Research Poster
+
+DeepLog-Infinity is accompanied by a complete intellectual property and international exhibition package, including statutory patent specifications (Thai DIP & WIPO PCT with 10 comprehensive claims), a Gartner/Forrester Total Economic Impact (TEI) ROI model quantifying \$30.2M annual downtime prevention, and an official high-resolution research poster designed for international judging defense.
+
+<p align="center">
+  <img src="poster/deeplog_poster.png" width="75%" alt="DeepLog-Infinity Official Research Poster" style="border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); margin: 16px 0;" />
+</p>
+<p align="center"><em>Figure 8: DeepLog-Infinity Official Research Poster (USENIX Security / IPITEx Exhibition Edition) by Mr. Chalermsak Sinsrok, Dual Degree (B.Eng. IoT System and Information + B.Sc. Industrial Physics), King Mongkut's Institute of Technology Ladkrabang (KMITL).</em></p>
+
+---
+
 ## Project Structure
 
 ```
@@ -414,8 +471,15 @@ DeepLog/
 │   ├── deeplog_infinity_usenix.pdf    # Compiled publication-grade PDF (10 pages)
 │   └── references.bib                 # Comprehensive BibTeX bibliography
 │
+├── poster/                            # Exhibition & Publication Visuals
+│   ├── deeplog_poster.html            # Standalone HTML vector design
+│   └── deeplog_poster.png             # 1080x1350 High-Res Research Poster
+│
 ├── docs/                              # Patent & International Exhibition Artifacts
 │   ├── ipitex_exhibition_guide.md     # 3-minute live pitch & judging defense guide
+│   ├── images/                        # Live dashboard & showcase captures
+│   │   ├── cockpit_dashboard.png      # Real-time Streamlit cockpit screenshot
+│   │   └── showcase_terminal.png      # Master CLI showcase terminal output
 │   └── patent/
 │       ├── patent_specification_english.md # WIPO PCT patent specifications (10 claims)
 │       └── patent_specification_thai.md    # Thai DIP statutory patent filing
@@ -529,6 +593,17 @@ DeepLog/
 │
 ├── dataset/HDFS_v1/                   # 29 HDFS templates & preprocessed traces
 └── results/                           # Publication figures and exported metrics
+    ├── figures/                       # Empirical benchmark curves & confusion matrices
+    │   ├── scoring_precision_recall.png # Precision-Recall trade-off (570k blocks)
+    │   ├── nll_threshold_sweep.png    # Cumulative NLL sensitivity sweep
+    │   ├── confusion_matrix.png       # Block-level confusion matrix
+    │   ├── topk_accuracy.png          # Next-event Top-K accuracy
+    │   ├── topk_block_tradeoff.png    # Window size vs FPR reduction
+    │   ├── serving_benchmark.png      # Throughput & tail latency (CPU/MPS)
+    │   ├── streaming_latency.png      # Streaming simulator latency breakdown
+    │   ├── event_transitions.png      # 29-template Markov transition matrix
+    │   └── event_frequency.png        # Template occurrence frequency
+    └── metrics/                       # Raw evaluation JSON artifacts
 ```
 
 ---

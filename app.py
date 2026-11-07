@@ -2321,8 +2321,6 @@ def render_cockpit():
     # Sidebar
     st.sidebar.title("🛸 DeepLog Cockpit")
     st.sidebar.markdown("**Autonomous Observability & Safety Radar**")
-    if st.sidebar.button("🏆 IPITEx 2027 Live Tour", use_container_width=True, type="primary"):
-        st.session_state["show_ipitex_tour"] = not st.session_state.get("show_ipitex_tour", False)
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🛰️ System Status")
     st.sidebar.markdown(
@@ -2353,16 +2351,6 @@ def render_cockpit():
     st.markdown(
         "Autonomous Full-Stack Observability, Adversarial Chaos Self-Play & Provable Safety Radar for Distributed Systems."
     )
-
-    # IPITEx 2027 Live Exhibition Tour Hero Launcher
-    tour_active = st.session_state.get("show_ipitex_tour", False)
-    btn_text = "❌ Close IPITEx 2027 Live Tour" if tour_active else "🏆 Launch IPITEx 2027 Live Exhibition Tour (3-Min Pitch Mode)"
-    if st.button(btn_text, key="hero_tour_toggle_btn", type="primary" if not tour_active else "secondary"):
-        st.session_state["show_ipitex_tour"] = not tour_active
-        st.rerun()
-
-    if st.session_state.get("show_ipitex_tour", False):
-        render_ipitex_live_tour()
 
     # Top KPI Metrics Ribbon
     k1, k2, k3, k4, k5 = st.columns(5)
